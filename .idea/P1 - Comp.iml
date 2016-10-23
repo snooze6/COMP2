@@ -5,9 +5,11 @@
       <sourceFolder url="file://$MODULE_DIR$/src/external/model/hash.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/external/model/hash.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main.c" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/definitions/definitions.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/input_system/input_system.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/input_system/input_system.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/helpers/reader.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/helpers/reader.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/definitions/definitions.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.5.2 (C:\tools\python3\python.exe)" jdkType="Python SDK" />
@@ -18,7 +20,6 @@
           <root url="file://C:/tools/cygwin64/lib/gcc/x86_64-pc-cygwin/5.4.0/include" />
           <root url="file://C:/tools/cygwin64/usr/include" />
         </CLASSES>
-        <LIBRARY_FILE />
         <SOURCES>
           <root url="file://C:/tools/cygwin64/lib/gcc/x86_64-pc-cygwin/5.4.0/include" />
           <root url="file://C:/tools/cygwin64/usr/include" />

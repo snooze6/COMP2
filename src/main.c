@@ -1,44 +1,29 @@
-#include "definitions/definitions.h"
+
 #include "external/model/hash.h"
 #include "helpers/reader.h"
+#include "input_system/input_system.h"
+#include "config.h"
 
-void main(int argc, char **argv) {
-    printf("Hello World!!\n\n");
-
-
+int main(int argc, char **argv) {
+    printf("D Lexical_Analyzer v0.1\n");
 
     hashtable_t *hashtable = ht_create(65536);
 
-//	ht_set( hashtable, "key1", "inky" );
-//	ht_set( hashtable, "key2", "pinky" );
-//	ht_set( hashtable, "key3", "blinky" );
-//	ht_set( hashtable, "key4", "floyd" );
-//
-//	printf( "%s\n", ht_get( hashtable, "key1" ) );
-//	printf( "%s\n", ht_get( hashtable, "key2" ) );
-//	printf( "%s\n", ht_get( hashtable, "key3" ) );
-//	printf( "%s\n", ht_get( hashtable, "key4" ) );
-
-
-    char* file = "C:\\Users\\arman\\workspace\\c\\P1 - Comp\\src\\definitions\\definitions.h";
-    char* source = "C:\\Users\\arman\\workspace\\c\\P1 - Comp\\regression.d";
-
-//    int out = read_definitions(file);
-//    if (out!=0){
-//        printf("Error reading\n");
-//    }
+    char* file = "C:\\Users\\armando\\workspace\\c\\COMP1\\src\\definitions\\definitions.h";
+    char* source_path = "C:\\Users\\armando\\workspace\\c\\COMP1\\regression.d";
 
     int out = load_definitions(file, hashtable);
     if (out!=0){
-        printf("Error loading\n");
+        printf("%s Error loading definitions\n", ETAG);
+        return -1;
     }
 
-    printf("%s\n", ht_get(hashtable, "NEW"));
+    setFile(source_path); char c;
 
-    out = read_file(source);
-    if (out!=0){
-        printf("Error reading source\n");
+    while((c = getChar()) != EOF){
+        printf("%c", c);
     }
+    closeFile();
 
-    exit(0);
+    return 0;
 }
