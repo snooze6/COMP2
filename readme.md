@@ -8,11 +8,12 @@ Construir un analizador léxico que devuelva los componentes léxicos que aparec
 Los siguientes comentarios tan sólo pretenden servir como sugerencia para el diseño y desarrollo del analizador que se pide. Plantean una forma de resolución un tanto pedestre, pero suficiente, aunque admiten un amplio margen de mejora que será valorado.
 
 Podemos descomponer el diseño en un conjunto de cinco ficheros de código:
-1. un fichero de definiciones accesibles desde los otros tres ficheros
-2. un fichero que albergará el analizador léxico propiamente dicho
-3. un fichero donde implementaremos la tabla de símbolos y sus funciones de acceso
-4. un fichero que albergará el sistema de entrada\
-5. un fichero que albergará el código de gestión de errores. 
+
+1. Un fichero de definiciones accesibles desde los otros tres ficheros
+2. Un fichero que albergará el analizador léxico propiamente dicho
+3. Un fichero donde implementaremos la tabla de símbolos y sus funciones de acceso
+4. Un fichero que albergará el sistema de entrada\
+5. Un fichero que albergará el código de gestión de errores. 
 6. Adicionalmente, podemos utilizar un fichero que invocará al analizador léxico para solicitar el siguiente componente léxico del código fuente, mostrándolo por pantalla para poder realizar la evaluación de la práctica.
 
 Comentaremos brevemente una posible implementación para estos ficheros:
