@@ -35,6 +35,7 @@ int load_definitions(char *filename, hashtable_t* table){
     char * line = NULL;
     size_t len = 0;
     ssize_t read;
+    int max;
 
     fp = fopen(filename, "r");
 
@@ -47,6 +48,7 @@ int load_definitions(char *filename, hashtable_t* table){
                 char* word = strtok (NULL," ")+2;
                 char* num = strtok (NULL," ");
                 int n = atoi(num);
+                max = n;
                 num[strlen(num)-2] = '\0';
 //                printf ("   - <%s %d>\n",word, n);
                 struct item *aux;
@@ -56,6 +58,12 @@ int load_definitions(char *filename, hashtable_t* table){
                 ht_set(table, word, aux);
             }
         }
+        max++;
+        struct item *aux;
+        aux = malloc(sizeof(struct item));
+        aux->code = max;
+        aux->instance = " ";
+        ht_set(table, " ", aux);
 
         fclose(fp);
         return 0;

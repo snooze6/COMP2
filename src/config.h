@@ -9,4 +9,6 @@
 #define VTAG "[-] -"
 #define WTAG "[*] -"
 
+hashtable_t *hashtable;
+
 #endif //P1_COMP_CONFIG_H

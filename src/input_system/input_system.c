@@ -5,6 +5,7 @@
 #include "input_system.h"
 
 FILE *working_file = NULL;
+char c = '\0';
 
 int setFile(char *filename){
     working_file = fopen(filename, "r");
@@ -19,13 +20,20 @@ int setFile(char *filename){
 
 char getChar(){
     if (working_file != NULL) {
-        return (char) getc(working_file);
+        if (c != '\0'){
+            char j = c;
+            c = '\0';
+            return j;
+        } else {
+            return (char) getc(working_file);
+        }
     } else {
         return EOF;
     }
 }
 
-char putChar(char c){
+char putChar(char a){
+    c = a;
     return c;
 }
 
