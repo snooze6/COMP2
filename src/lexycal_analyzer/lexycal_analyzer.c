@@ -4,38 +4,20 @@
 
 #include "lexycal_analyzer.h"
 
-typedef enum {VIRGIN, OK, ERROR, ENDED} status_t;
+typedef enum {VIRGIN, OK, ERROR, ENDED, NUMBER, ALFA} status_t;
 status_t status = VIRGIN;
 
 char *word = NULL;
 int pos = 0;
+int count = 0;
 
 int isDelimiter(char c) {
-    switch (c) {
-        // Llaves
-        case '[':
-        case ']':
-        case '{':
-        case '}':
-        case '(':
-        case ')':
-        case '<':
-        case '>':
-        // Finales
-        case ';':
-        case ' ':
-        case EOF:
-        // Operadores
-        case '+':
-        case '-':
-        case '*':
-        case '=':
-        // Miscellanéa
-        case '.':
+    for (int i=0; i < (sizeonechar-1) ;i++){
+        char d = onechar[i][0];
+        if (c==d)
             return 1;
-        default:
-            return 0;
     }
+    return 0;
 }
 
 void strupp(char* beg) {
@@ -43,13 +25,19 @@ void strupp(char* beg) {
 }
 
 struct item *next_comp(){
-    printf("%s Next Component Called\n", VTAG);
-    while (status!=ERROR) {
-        struct item *out = NULL;
+    printf("%s < Componente Léxico >\n", VTAG);
+    struct item *out = NULL;
+    while ((status!=ERROR && status!=ENDED)){
         char c;
 
         c = getChar();
-        printf("%s   Char: %c\n", VTAG, c);
+        if (c=='\n') {
+            printf("%s   Char: \'\\n\'\n", VTAG);
+        } else if (c=='\r') {
+            printf("%s   Char: \'\\r\'\n", VTAG);
+        } else {
+            printf("%s   Char: \'%c\'\n", VTAG, c);
+        }
 
         if (!(c == EOF || isDelimiter(c))) {
             switch (status) {
@@ -63,36 +51,55 @@ struct item *next_comp(){
                     word[pos] = c;
                     pos++;
                     break;
-                case ERROR:
-                    break;
-                case ENDED:
-                    word[pos] = c;
-                    pos++;
-                    break;
                 default:
                     break;
             }
         } else {
-            if (status!=VIRGIN) {
+            if (word!=NULL) {
                 word[pos] = '\0'; strupp(word);
                 pos = 0; status = VIRGIN;
                 putChar(c);
-                printf("%s Ended word: %s\n", VTAG, word);
                 struct item *aux = ht_get(hashtable, word);
-                if (aux != NULL)
+                printf("%s End word: \'%s\'\n", VTAG, word);
+                if (aux != NULL) {
                     out = aux;
+                } else {
+                    aux = malloc(sizeof(struct item));
+                    aux->code = 500 + count;
+                    count++;
+                    aux->instance = word;
+                    printf("%s Inserting identifier: \'%s\'\n", VTAG, word);
+                    ht_set(hashtable, word, aux);
+                    out = ht_get(hashtable, word);;
+                }
+                status = ENDED;
             } else {
-                word = malloc(2 * sizeof(char));
-                word[0]=c; word[1]='\0';
-                struct item *aux = ht_get(hashtable, word);
-                if (aux != NULL)
-                    out = aux;
+                if (c!='\r') {
+                    word = malloc(2 * sizeof(char));
+                    word[0] = c;
+                    word[1] = '\0';
+                    printf("%s Ending symbol: \'%s\'\n", VTAG, word);
+                    struct item *aux = ht_get(hashtable, word);
+                    if (aux != NULL)
+                        out = aux;
+                    status = VIRGIN;
+                    printf("%s </Componente Léxico >\n", VTAG);
+                    return out;
+                } else {
+                    status = VIRGIN;
+                }
+
             }
             free(word);
-            return out;
+            word = NULL;
         }
     }
+    printf("%s </Componente Léxico >\n", VTAG);
+
     if (status==ERROR){
         return NULL;
     }
+    status = VIRGIN;
+    return out;
+
 }

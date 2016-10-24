@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "../external/model/hash.h"
 #include <memory.h>
+#include "../config.h"
 
 int read_definitions(char *filename);
 int load_definitions(char *filename, hashtable_t* table);

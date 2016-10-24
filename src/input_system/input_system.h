@@ -6,6 +6,7 @@
 #define P1_COMP_INPUT_SYSTEM_H
 
 #include <stdio.h>
+#include "../config.h"
 
 int setFile(char *filename);
 char getChar();

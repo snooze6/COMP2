@@ -42,6 +42,7 @@ int load_definitions(char *filename, hashtable_t* table){
     if (fp == NULL) {
         return -1;
     } else {
+        printf("< LOADING TABLE >\n");
         while ((read = getline(&line, &len, fp)) != -1) {
             if (strstr(line, "#define D_")){
                 char* pch = strtok (line," ");
@@ -55,15 +56,21 @@ int load_definitions(char *filename, hashtable_t* table){
                     aux = malloc(sizeof(struct item));
                     aux->code = n;
                     aux->instance = word;
+                printf("  ");
                 ht_set(table, word, aux);
             }
         }
-        max++;
+
         struct item *aux;
-        aux = malloc(sizeof(struct item));
-        aux->code = max;
-        aux->instance = " ";
-        ht_set(table, " ", aux);
+        for (int i=0; i < (sizeonechar-1) ;i++){
+            max++;
+            aux = malloc(sizeof(struct item));
+            aux->code = max;
+            aux->instance = onechar[i];
+            printf("  ");
+            ht_set(table, onechar[i], aux);
+        }
+        printf("</LOADING TABLE >\n");
 
         fclose(fp);
         return 0;

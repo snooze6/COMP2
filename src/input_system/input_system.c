@@ -9,7 +9,7 @@ char c = '\0';
 
 int setFile(char *filename){
     working_file = fopen(filename, "r");
-    printf("Reading %s\n", filename);
+//    printf("Reading %s\n", filename);
 
     if (working_file == NULL) {
         return -1;
@@ -19,6 +19,7 @@ int setFile(char *filename){
 }
 
 char getChar(){
+//    getchar();
     if (working_file != NULL) {
         if (c != '\0'){
             char j = c;
@@ -34,6 +35,13 @@ char getChar(){
 
 char putChar(char a){
     c = a;
+    if (c=='\n'){
+        printf("%s     Returning char \'\\n\'\n",VTAG);
+    } else if (c=='\r'){
+        printf("%s     Returning char \'\\r\'\n",VTAG);
+    }else {
+        printf("%s     Returning char \'%c\'\n",VTAG, a);
+    }
     return c;
 }
 

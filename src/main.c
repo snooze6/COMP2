@@ -27,7 +27,11 @@ int main(int argc, char **argv) {
 
     struct item * a;
     while((a = next_comp())!=NULL){
-        printf("Componente: %s - %d\n", a->instance, a->code);
+        if (strstr(a->instance,"\n")){
+            printf("%s ------------------------- Componente: \'%s\' - %d\n",VTAG , "\\n", a->code);
+        } else {
+            printf("%s ------------------------- Componente: \'%s\' - %d\n",VTAG , a->instance, a->code);
+        }
     }
 
     closeFile();

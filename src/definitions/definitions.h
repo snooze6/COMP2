@@ -103,7 +103,7 @@
 #define D_USHORT 395
 #define D_VERSION 396
 #define D_VOID 397
-#define D_VOLATILE (DEPRECATED) 398
+#define D_VOLATILE 398
 #define D_WCHAR 399
 #define D_WHILE 400
 #define D_WITH 401
