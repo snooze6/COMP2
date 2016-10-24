@@ -8,12 +8,12 @@ Construir un analizador léxico que devuelva los componentes léxicos que aparec
 Los siguientes comentarios tan sólo pretenden servir como sugerencia para el diseño y desarrollo del analizador que se pide. Plantean una forma de resolución un tanto pedestre, pero suficiente, aunque admiten un amplio margen de mejora que será valorado.
 
 Podemos descomponer el diseño en un conjunto de cinco ficheros de código:
-1) un fichero de definiciones accesibles desde los otros tres ficheros
-2) un fichero que albergará el analizador léxico propiamente dicho
-3) un fichero donde implementaremos la tabla de símbolos y sus funciones de acceso
-4) un fichero que albergará el sistema de entrada\
-5) un fichero que albergará el código de gestión de errores. 
-6) Adicionalmente, podemos utilizar un fichero que invocará al analizador léxico para solicitar el siguiente componente léxico del código fuente, mostrándolo por pantalla para poder realizar la evaluación de la práctica.
+1. un fichero de definiciones accesibles desde los otros tres ficheros
+2. un fichero que albergará el analizador léxico propiamente dicho
+3. un fichero donde implementaremos la tabla de símbolos y sus funciones de acceso
+4. un fichero que albergará el sistema de entrada\
+5. un fichero que albergará el código de gestión de errores. 
+6. Adicionalmente, podemos utilizar un fichero que invocará al analizador léxico para solicitar el siguiente componente léxico del código fuente, mostrándolo por pantalla para poder realizar la evaluación de la práctica.
 
 Comentaremos brevemente una posible implementación para estos ficheros:
 
@@ -71,9 +71,9 @@ Algunas funciones en C que pueden resultar útiles para el desarrollo de esta pr
 isalpha(), isdigit(), isalnum(), atoi(), atof(), getc(), strcpy()
 ```
 
-TODO:
+### TODO:
 
-1) Solucionar problemas con \n y \r
-2) Soportar comentarios
-3) Soportar identificadores bien
-4) Soportar números bien
+1. Solucionar problemas con \n y \r
+2. Soportar comentarios
+3. Soportar identificadores bien
+4. Soportar números bien
