@@ -70,3 +70,10 @@ Algunas funciones en C que pueden resultar útiles para el desarrollo de esta pr
 ```C
 isalpha(), isdigit(), isalnum(), atoi(), atof(), getc(), strcpy()
 ```
+
+TODO:
+
+1) Solucionar problemas con \n y \r
+2) Soportar comentarios
+3) Soportar identificadores bien
+4) Soportar números bien
