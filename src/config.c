@@ -11,7 +11,9 @@ char * onechar[] = {
         // Operators
         "+","-","*","=",
         // Endings
-        " ",";", "\n","\r"
+        " ",";", "\n","\r",
+        // Comments
+        "//"
 };
 
-int sizeonechar = 18;
+int sizeonechar = 19;

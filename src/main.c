@@ -10,8 +10,10 @@ int main(int argc, char **argv) {
 
     hashtable = ht_create(65536);
 
-    char* file = "C:\\Users\\armando\\workspace\\c\\COMP1\\src\\definitions\\definitions.h";
-    char* source_path = "C:\\Users\\armando\\workspace\\c\\COMP1\\regression.d";
+//    char* file = "C:\\Users\\armando\\workspace\\c\\COMP1\\src\\definitions\\definitions.h";
+//    char* source_path = "C:\\Users\\armando\\workspace\\c\\COMP1\\regression.d";
+    char* file = "C:\\Users\\arman\\workspace\\c\\P1 - COMP\\src\\definitions\\definitions.h";
+    char* source_path = "C:\\Users\\arman\\workspace\\c\\P1 - Comp\\regression.d";
 
     int out = load_definitions(file, hashtable);
     if (out!=0){
@@ -32,6 +34,7 @@ int main(int argc, char **argv) {
         } else {
             printf("%s ------------------------- Componente: \'%s\' - %d\n",VTAG , a->instance, a->code);
         }
+        getchar();
     }
 
     closeFile();

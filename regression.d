@@ -1,6 +1,21 @@
+/+
+    Nivel 1 - 1
+    /+
+        Nivel 2 - 1
+    +/
+    /+
+        Nivel 2 - 2
+        /+
+            Nivel 3 - 1
+        +/
+        /+
+            Nivel 3 - 2
+        +/
+    +/
++/
 import std.stdio;
-import std.algorithm.iteration;
-import std.exception;
+import/+/+Hell+/+/std.algorithm.iteration;
+import/*asd*/std.exception;
 
 
 double beta1(double[] x, double[] y, double x_bar, double y_bar)

@@ -76,5 +76,18 @@ isalpha(), isdigit(), isalnum(), atoi(), atof(), getc(), strcpy()
 
 1. Solucionar problemas con \n y \r
 2. Soportar comentarios
+    1. ~~ Comentario '//' ~~
+    2. Comentario '/**/'
+    3. Comentario '/++/'
+    4. Comentario '/** */'
 3. Soportar identificadores bien
 4. Soportar números bien
+5. Soportar strings
+
+### PREGUNTAS:
+
+1. 1234f es componente léxico?
+2. \n es componente léxico?
+  - No y los espacios tampoco
+3. Errores
+4. ==

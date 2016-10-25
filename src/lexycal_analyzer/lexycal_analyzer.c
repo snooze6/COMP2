@@ -4,11 +4,12 @@
 
 #include "lexycal_analyzer.h"
 
-typedef enum {VIRGIN, OK, ERROR, ENDED, NUMBER, ALFA} status_t;
+typedef enum {VIRGIN, OK, ERROR, ENDED, NUMBER, ALFA, COMMENT} status_t;
 status_t status = VIRGIN;
 
 char *word = NULL;
 int pos = 0;
+int commdepth = 0;
 int count = 0;
 
 int isDelimiter(char c) {
@@ -24,20 +25,104 @@ void strupp(char* beg) {
     while (*beg = toupper(*beg)) beg++;
 }
 
+void printchar(char c){
+    if (c=='\n') {
+        printf("%s   Char: \'\\n\'\n", VTAG);
+    } else if (c=='\r') {
+        printf("%s   Char: \'\\r\'\n", VTAG);
+    } else {
+        printf("%s   Char: \'%c\'\n", VTAG, c);
+    }
+}
+
+void reset(){
+    pos = 0;
+    free(word);
+    word = NULL;
+}
+
+struct item * getinsert(){
+    struct item *aux = ht_get(hashtable, word);
+    if (aux == NULL) {
+        aux = malloc(sizeof(struct item));
+        aux->code = 500 + count;
+        count++;
+        aux->instance = word;
+        printf("%s Inserting identifier: \'%s\'\n", VTAG, word);
+        ht_set(hashtable, word, aux);
+        aux = ht_get(hashtable, word);;
+    }
+    return aux;
+}
+
+char process_comment(char c) {
+    if (c == '/'){
+        char j = getChar(); char k; char l;
+        switch (j){
+            case '/':
+                printf("%s    Commented: //", VTAG);
+                while ((k = getChar()) != '\n'){
+                    printf("%c", k);
+                    ;
+                }
+                printf("\n");
+                c = getChar();
+                break;
+            case '*':
+                printf("%s    Commented:\n /*", VTAG);
+                while ((k = getChar())){
+                    if (k == '*'){
+                        k = getChar();
+                        if (k=='/'){
+                            break;
+                        }
+                    } else {
+                        printf("%c", k);
+                        ;
+                    }
+                }
+                printf("*/\n");
+                c = ' ';
+                break;
+            case '+':
+                commdepth ++;
+                printf("%s    Commented:\n/+",VTAG);
+                while (commdepth!=0){
+                    k = getChar();
+                    printf("%c", k);
+                    if (k=='/'){
+                        l = getChar();
+                        printf("%c", l);
+                        if (l=='+'){
+                            commdepth++;
+                        }
+                    }
+                    if (k=='+'){
+                        l = getChar();
+                        printf("%c", l);
+                        if (l=='/'){
+                            commdepth--;
+                        }
+                    }
+                }
+                printf("\n");
+                c = ' ';
+                break;
+            default:
+                break;
+        }
+    }
+    return c;
+}
+
 struct item *next_comp(){
     printf("%s < Componente Léxico >\n", VTAG);
     struct item *out = NULL;
     while ((status!=ERROR && status!=ENDED)){
-        char c;
+        char c; c = getChar();
 
-        c = getChar();
-        if (c=='\n') {
-            printf("%s   Char: \'\\n\'\n", VTAG);
-        } else if (c=='\r') {
-            printf("%s   Char: \'\\r\'\n", VTAG);
-        } else {
-            printf("%s   Char: \'%c\'\n", VTAG, c);
-        }
+        c = process_comment(c);
+        printchar(c);
 
         if (!(c == EOF || isDelimiter(c))) {
             switch (status) {
@@ -55,43 +140,37 @@ struct item *next_comp(){
                     break;
             }
         } else {
-            if (word!=NULL) {
-                word[pos] = '\0'; strupp(word);
-                pos = 0; status = VIRGIN;
-                putChar(c);
-                struct item *aux = ht_get(hashtable, word);
-                printf("%s End word: \'%s\'\n", VTAG, word);
-                if (aux != NULL) {
-                    out = aux;
-                } else {
-                    aux = malloc(sizeof(struct item));
-                    aux->code = 500 + count;
-                    count++;
-                    aux->instance = word;
-                    printf("%s Inserting identifier: \'%s\'\n", VTAG, word);
-                    ht_set(hashtable, word, aux);
-                    out = ht_get(hashtable, word);;
-                }
+            // Si hay una palabra entonces ese es el componente léxico
+            if (word != NULL) {
+                // Acabamos la palabra y la ponemos en UPPERCASE
+                word[pos] = '\0';
+                strupp(word);
                 status = ENDED;
-            } else {
-                if (c!='\r') {
-                    word = malloc(2 * sizeof(char));
-                    word[0] = c;
-                    word[1] = '\0';
-                    printf("%s Ending symbol: \'%s\'\n", VTAG, word);
-                    struct item *aux = ht_get(hashtable, word);
-                    if (aux != NULL)
-                        out = aux;
-                    status = VIRGIN;
-                    printf("%s </Componente Léxico >\n", VTAG);
-                    return out;
-                } else {
-                    status = VIRGIN;
-                }
+                // Devolvemos el caracter al sistema de entrada
+                putChar(c);
+                printf("%s End word: \'%s\'\n", VTAG, word);
 
+                out = getinsert();
+            } else {
+                status = VIRGIN;
+                if (c != '\r') {
+                    // Construir palabra
+                    word = malloc(2 * sizeof(char));
+                    word[0] = c; word[1] = '\0';
+
+                    if (c != '\n') {
+                        printf("%s Ending symbol: \'%s\'\n", VTAG, word);
+                    } else {
+                        printf("%s Ending symbol: \'%s\'\n", VTAG, "\\n");
+                    }
+
+                    out = getinsert();
+
+                    printf("%s </Componente Léxico >\n", VTAG);
+                    reset(); return out;
+                }
             }
-            free(word);
-            word = NULL;
+            reset();
         }
     }
     printf("%s </Componente Léxico >\n", VTAG);
