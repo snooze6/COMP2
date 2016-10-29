@@ -6,7 +6,7 @@
 #include "lexycal_analyzer/lexycal_analyzer.h"
 
 int main(int argc, char **argv) {
-    printf("D Lexical_Analyzer v0.1\n");
+    printf(COLOR_MAGENTA"D Lexical_Analyzer v0.1\n"COLOR_RESET);
 
     hashtable = ht_create(65536);
 
@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
 
     int out = load_definitions(file, hashtable);
     if (out!=0){
-        printf("%s Error loading definitions\n", ETAG);
+        printf(COLOR_RED"%s Error loading definitions\n"COLOR_RESET, ETAG);
         return -1;
     }
 
@@ -30,11 +30,12 @@ int main(int argc, char **argv) {
     struct item * a;
     while((a = next_comp())!=NULL){
         if (strstr(a->instance,"\n")){
-            printf("%s ------------------------- Componente: \'%s\' - %d\n",VTAG , "\\n", a->code);
+            printf("%s ------------------------- Componente: \n\'%s\' - %d\n",VTAG , a->instance, a->code);
         } else {
             printf("%s ------------------------- Componente: \'%s\' - %d\n",VTAG , a->instance, a->code);
         }
         getchar();
+//        exit(0);
     }
 
     closeFile();

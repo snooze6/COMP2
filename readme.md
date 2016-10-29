@@ -74,15 +74,16 @@ isalpha(), isdigit(), isalnum(), atoi(), atof(), getc(), strcpy()
 
 ### TODO:
 
-1. Solucionar problemas con \n y \r
+1. ~~Solucionar problemas con \n y \r~~
 2. Soportar comentarios
-    1. ~~ Comentario '//' ~~
-    2. Comentario '/**/'
-    3. Comentario '/++/'
+    1. ~~Comentario '//'~~
+    2. ~~Comentario '/**/'~~
+    3. ~~Comentario '/++/'~~
     4. Comentario '/** */'
 3. Soportar identificadores bien
 4. Soportar números bien
 5. Soportar strings
+6. Sacar caracteres simples
 
 ### PREGUNTAS:
 

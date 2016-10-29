@@ -99,13 +99,13 @@ void ht_set( hashtable_t *hashtable, char *key, struct item *value ) {
         if( next == hashtable->table[ bin ] ) {
             newpair->next = next;
             hashtable->table[ bin ] = newpair;
-            if (strstr(value->instance, "\n")) {
-                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", "\\n", value->code, bin);
-            } else if (strstr(value->instance, "\r")){
-                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", "\\r", value->code, bin);
-            } else {
-                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", value->instance, value->code, bin);
-            }
+//            if (strstr(value->instance, "\n")) {
+//                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", "\\n", value->code, bin);
+//            } else if (strstr(value->instance, "\r")){
+//                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", "\\r", value->code, bin);
+//            } else {
+//                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", value->instance, value->code, bin);
+//            }
 
             // We're at the end of the linked list in this bin.
         } else if ( next == NULL ) {

@@ -13,7 +13,7 @@ char * onechar[] = {
         // Endings
         " ",";", "\n","\r",
         // Comments
-        "//"
+        "/"
 };
 
 int sizeonechar = 19;

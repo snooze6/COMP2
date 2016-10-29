@@ -1,18 +1,3 @@
-/+
-    Nivel 1 - 1
-    /+
-        Nivel 2 - 1
-    +/
-    /+
-        Nivel 2 - 2
-        /+
-            Nivel 3 - 1
-        +/
-        /+
-            Nivel 3 - 2
-        +/
-    +/
-+/
 import std.stdio;
 import/+/+Hell+/+/std.algorithm.iteration;
 import/*asd*/std.exception;
