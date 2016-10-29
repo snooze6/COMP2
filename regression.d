@@ -1,7 +1,10 @@
+string s = "Hello \"World";
+string j = "asdfsfdsa
+asdfsaf"
+
 import std.stdio;
 import/+/+Hell+/+/std.algorithm.iteration;
 import/*asd*/std.exception;
-
 
 double beta1(double[] x, double[] y, double x_bar, double y_bar)
 {
@@ -42,6 +45,4 @@ void main()
     writefln("\"Intercept\": %f", _0);
     ///Parsing tests. Comment to compile
     a = /+ // +/ 1;
-    a = /+ "+/" +/ 1";
-    a = /+ /* +/ *2/ 3;
-}
+    a = /+ "+/" 

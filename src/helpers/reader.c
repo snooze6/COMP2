@@ -69,23 +69,23 @@ int load_definitions(char *filename, hashtable_t* table){
             }
         }
 
-//        struct item *aux;
-//        for (int i=0; i < (sizeonechar-1) ;i++){
-//            max++;
-//            aux = malloc(sizeof(struct item));
-//            aux->code = max;
-//            aux->instance = onechar[i];
-//            printf("  ");
-//            int bin = ht_hash( hashtable, aux->instance);
-//            if (strstr(aux->instance, "\n")) {
-//                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", "\\n", aux->code, bin);
-//            } else if (strstr(aux->instance, "\r")){
-//                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", "\\r", aux->code, bin);
-//            } else {
-//                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", aux->instance, aux->code, bin);
-//            }
-//            ht_set(table, onechar[i], aux);
-//        }
+        struct item *aux;
+        for (int i=0; i < (sizeonechar-1) ;i++){
+            max++;
+            aux = malloc(sizeof(struct item));
+            aux->code = max;
+            aux->instance = onechar[i];
+            printf("  ");
+            int bin = ht_hash( hashtable, aux->instance);
+            if (strstr(aux->instance, "\n")) {
+                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", "\\n", aux->code, bin);
+            } else if (strstr(aux->instance, "\r")){
+                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", "\\r", aux->code, bin);
+            } else {
+                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", aux->instance, aux->code, bin);
+            }
+            ht_set(table, onechar[i], aux);
+        }
         printf("</LOADING TABLE >\n"COLOR_RESET);
 
         fclose(fp);

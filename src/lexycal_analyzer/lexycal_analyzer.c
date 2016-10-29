@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "lexycal_analyzer.h"
 
 typedef enum {VIRGIN, OK, ERROR, ENDED, NUMBER, ALFA, COMMENT, STRING} status_t;
@@ -11,6 +12,11 @@ size_t size = 0, pos = 0;
 int commdepth = 0;
 // Number of identifiers found
 int count = 0, id_start = 500;
+// If the string is ' or "
+char strini;
+// If the number has suffix
+bool num_suffix = false;
+bool num_first = true;
 
 /**
  * Add a char to a dynamic String
@@ -220,6 +226,122 @@ char process_comment(char c) {
 }
 
 /**
+ * Process a string
+ * @param c
+ * @return
+ */
+int process_string(char c) {
+    if (commdepth != 0) {
+        // Escape char
+        appendChar(c);
+        commdepth = 0;
+    } else {
+        if (c=='\\'){
+            appendChar(c);
+            commdepth = 1;
+        } else if (c==strini) {
+            appendChar(c);
+            appendChar('\0');
+            printf("%s    String:\n'%s'\n",VTAG, word);
+            return 0;
+        } else {
+            appendChar(c);
+        }
+    }
+    return 1;
+}
+
+/**
+ * Process a number
+ * Float suffix: f or F
+ * Real suffix: L
+ * Imaginary suffix: i
+ * @param c
+ * @return
+ */
+int process_number(char c) {
+    switch (commdepth) {
+        case 0:
+            // No point
+            switch(c){
+                case '0' ... '9':
+                    appendChar(c);
+                    break;
+                case '.':
+                    appendChar(c);
+                    commdepth = 1;
+                    break;
+                case 'f': case 'F': case'L': case 'i':
+                    appendChar(c);
+                    num_suffix = true;
+                case '_':
+                    break;
+                default:
+                    if (isDelimiter(c)){
+                        putChar(c);
+                        return 0;
+                    } else if (num_first == true && (c == 'x' || c=='X')){
+                        appendChar(c);
+                        commdepth = 2;
+                    } else {
+                        // Error
+                        return 0;
+                    }
+            }
+            break;
+        case 1:
+            // Point already present
+            switch(c) {
+                case '0' ... '9':
+                    appendChar(c);
+                    break;
+                case '_':
+                    break;
+                case 'f': case 'F': case'L': case 'i':
+                    if (num_suffix) {
+                        // Error
+                        return 0;
+                    } else {
+                        num_suffix = true;
+                    }
+                default:
+                    if (isDelimiter(c)){
+                        putChar(c);
+                    } else {
+                        // Error
+                    }
+                    return 0;
+            }
+        case 2:
+            // Hexadecimal
+            switch(c) {
+                case '0' ... '9':
+                    appendChar(c);
+                    break;
+                case 'a' ... 'f':
+                    appendChar(toupper(c));
+                    break;
+                case 'A' ... 'F':
+                    appendChar(c);
+                    break;
+                case '_':
+                    break;
+                default:
+                    if (isDelimiter(c)){
+                        putChar(c);
+                    } else {
+                        // Error
+                    }
+                    return 0;
+            }
+            break;
+        default:break;
+    }
+    num_first = false;
+    return 1;
+}
+
+/**
  * Reads from the input system until it forms a Lexical component that is returned
  * @return Lexycal component
  */
@@ -245,53 +367,84 @@ struct item *next_comp(){
                      */
                     case VIRGIN:
                         appendChar(c);
+                        commdepth = 0;
                         if (isdigit(c)){
                             status = NUMBER;
+                            num_suffix = false;
+                            num_first = true;
                         } else {
-                            if (c=='"'){
+                            if (c=='"' || c=='\''){
+                                strini = c;
                                 status = STRING;
                             } else {
                                 status = ALFA;
                             }
                         }
                         break;
-                    case OK: case NUMBER: case ALFA: case STRING:
+                    case OK: case ALFA:
                         if (status==OK){
                             printf(COLOR_RED"-- Error --"COLOR_RESET);
                         }
                         appendChar(c);
                         break;
+                    case NUMBER:
+                        while (process_number(c)) {
+                            c = getChar();
+                            printchar(c);
+                        }
+                    case STRING:
+                        while (process_string(c)) {
+                            c = getChar();
+                            printchar(c);
+                        }
                     case ERROR:break;
                     case ENDED:break;
                     case COMMENT:break;
                 }
             } else {
-                // Lexycal component
-                if (word != NULL) {
-                    // Word to uppercase
-                    strupp(word);
-                    // Return char to input system
-                    putChar(c);
-                    printf("%s End word: \'%s\'\n", VTAG, word);
-
-                    out = getinsert();
-                    status = ENDED;
-                } else {
-                    if (c != '\r') {
-                        if (c != ' ' && c != '\n') {
-                            // Build symbol string
-                            word = malloc(2 * sizeof(char));
-                            word[0] = c;
-                            word[1] = '\0';
-
-                            printf("%s Ending symbol: \'%s\'\n", VTAG, word);
+                switch (status) {
+                    case ALFA:
+                        // Lexycal component
+                        if (word != NULL) {
+                            // Word to uppercase
+                            appendChar('\0');
+                            strupp(word);
+                            // Return char to input system
+                            putChar(c);
+                            printf("%s End word: \'%s\'\n", VTAG, word);
 
                             out = getinsert();
                             status = ENDED;
                         } else {
-                            continue;
+                            if (c != '\r') {
+                                if (c != ' ' && c != '\n') {
+                                    // Build symbol string
+                                    word = malloc(2 * sizeof(char));
+                                    word[0] = c;
+                                    word[1] = '\0';
+
+                                    printf("%s Ending symbol: \'%s\'\n", VTAG, word);
+
+                                    out = getinsert();
+                                    status = ENDED;
+                                } else {
+                                    continue;
+                                }
+                            }
                         }
-                    }
+                        break;
+                    case VIRGIN:break;
+                    case OK:break;
+                    case ERROR:break;
+                    case ENDED:break;
+                    case NUMBER:break;
+                    case COMMENT:break;
+                    case STRING:
+                        out = malloc(sizeof(struct item));
+                        out->code = 65535;
+                        out->instance = strdup(word);
+                        status = ENDED;
+                        break;
                 }
             }
         } else {
@@ -301,6 +454,8 @@ struct item *next_comp(){
                 // Documentation comment (Lexical component)
                 out = getinsert();
                 status = ENDED;
+            } else {
+                status = VIRGIN;
             }
         }
     }
