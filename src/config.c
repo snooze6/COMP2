@@ -22,5 +22,5 @@ char * operators[] = {
 
 int sizeonechar = 26;
 int sizeoperators = 13;
-bool config_verbose = true;
+bool config_verbose = false;
 int config_errors = 0;
