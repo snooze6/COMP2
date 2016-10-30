@@ -8,7 +8,6 @@
 
 int main(int argc, char **argv) {
     printf(COLOR_MAGENTA"D Lexical_Analyzer v0.1\n"COLOR_RESET);
-    printf("%d\n", argc);
     if( argc == 3 ) {
         hashtable = ht_create(65536);
 

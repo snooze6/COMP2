@@ -103,5 +103,6 @@ isalpha(), isdigit(), isalnum(), atoi(), atof(), getc(), strcpy()
 ### USAGE
 ```bash
     cd dist/bin
-    ./program <def.h> <source.d>
+    # ./program <def.h> <source.d>
+    ./P1___Comp ../../../src/definitions/definitions.h ../../../regression.d
 ```
