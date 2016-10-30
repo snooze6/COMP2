@@ -1,9 +1,3 @@
-// String problem
-enforce(x.length==y.length, "x and y should be the same length!");
-// One operator Problem
-double num=0
-whilectr < x.length
-
 import std.stdio;
 import/+/+Hell+/+/std.algorithm.iteration;
 import/*asd*/std.exception;
@@ -34,17 +28,22 @@ void main()
             Nested comments should be supported, no matter what's inside /*//*/
         +/
     +/
+	
     double[] x = [0b1, 2, 3, 4, 5, 6.5, 7, 7.5, 8_000/1.0e+03, 8.5];
     double[] y = [1, 2, 3, 3.2, 3.4, 40e-1, 4.2, 4.3, 4.35, 4.37];
     double x_bar, y_bar, b1, _0;
+	
     //Mean and regression parameters calculation
     x_bar = sum(x)/(cast(double)x.length);
     y_bar = sum(y)/(cast(double)y.length);
     b1 = beta1(x, y, x_bar, y_bar);
     _0 = y_bar - (b1*x_bar);
+	
     /**/ /* Print result */ /**/
     writefln("\"Slope\": %f", b1);
     writefln("\"Intercept\": %f", _0);
     ///Parsing tests. Comment to compile
+
+
     a = /+ // +/ 1;
     a = /+ "+/" 
