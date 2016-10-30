@@ -7,13 +7,20 @@ char * onechar[] = {
         // Puntuation
         ".",",",
         // Brackets
-        "[","]","{","}","(",")","<",">",
+        "[","]","{","}","(",")",
         // Operators
-        "+","-","*","=",
+        "+","-","*","=","!","~","&","|","<",">","%","^"
         // Endings
-        " ",";", "\n","\r",
+        " ",";", "\n","\r"," ",
         // Comments
         "/"
 };
+char * operators[] = {
+    // Operators
+    "+","-","*","=","!","~","&","|","<",">","%","^","/"
+};
 
-int sizeonechar = 19;
+int sizeonechar = 26;
+int sizeoperators = 13;
+bool config_verbose = true;
+int config_errors = 0;

@@ -1,5 +1,8 @@
-double[] x = [0b1, 2.35, 3f, 4i, 5e-1, 6.5, 7, 7.5, 8_000/1.0e+03, 8.5];
-double[] y = [1, 2, 3, 3.2, 3.4, 40e-1, 4.2, 4.3, 4.35, 4.37];
+// String problem
+enforce(x.length==y.length, "x and y should be the same length!");
+// One operator Problem
+double num=0
+whilectr < x.length
 
 import std.stdio;
 import/+/+Hell+/+/std.algorithm.iteration;

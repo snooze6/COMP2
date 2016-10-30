@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
         } else {
             printf("%s ------------------------- Componente: \'%s\' - %d\n",VTAG , a->instance, a->code);
         }
-        getchar();
+//        getchar();
 //        exit(0);
     }
 

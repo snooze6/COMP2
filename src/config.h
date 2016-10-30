@@ -7,6 +7,7 @@
 
 #include "external/model/hash.h"
 #include "helpers/logger.h"
+#include <stdbool.h>
 
 #define ETAG "[+] -"
 #define VTAG "[-] -"
@@ -24,5 +25,9 @@
 hashtable_t *hashtable;
 extern char * onechar[];
 extern int sizeonechar;
+extern char * operators[];
+extern int sizeoperators;
+extern bool config_verbose;
+extern int config_errors;
 
 #endif //P1_COMP_CONFIG_H

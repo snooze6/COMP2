@@ -80,15 +80,16 @@ isalpha(), isdigit(), isalnum(), atoi(), atof(), getc(), strcpy()
     2. ~~Comentario '/**/'~~
     3. ~~Comentario '/++/'~~
     4. ~~Comentario '/** */'~~
-3. Soportar identificadores bien
-4. Soportar números bien
-    1. Hexadecimales
-    2. Binarios
-    3. Extensiones...
-5. Soportar strings
-6. Sacar caracteres simples
+3. ~~Soportar identificadores bien~~
+4. ~~Soportar números bien~~
+    1. ~~Hexadecimales~~
+    2. ~~Binarios~~
+    3. ~~Extensiones...~~
+5. ~~Soportar strings~~
+6. ~~Sacar caracteres simples~~
 7. Entrada por bloques
-8. Errores
+8. ~~Errores~~
+9. ~~Operadores multicaracter~~
 
 ### PREGUNTAS:
 

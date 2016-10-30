@@ -9,6 +9,8 @@
 #include "../config.h"
 
 int setFile(char *filename);
+int getLine();
+int getCol();
 char getChar();
 char putChar(char c);
 void closeFile();

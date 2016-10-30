@@ -1,7 +1,6 @@
-#include <stdbool.h>
 #include "lexycal_analyzer.h"
 
-typedef enum {VIRGIN, OK, ERROR, ENDED, NUMBER, ALFA, COMMENT, STRING} status_t;
+typedef enum {VIRGIN, ERROR, ENDED, NUMBER, ALFA, COMMENT, STRING, OPERATOR} status_t;
 status_t status = VIRGIN;
 
 // Dynamic word
@@ -48,8 +47,22 @@ char * appendChar(char c) {
  * @return 1 if is a delimiter 0 otherwise
  */
 int isDelimiter(char c) {
-    for (int i=0; i < (sizeonechar) ;i++){
+    for (int i=0; i < (sizeonechar-1) ;i++){
         char d = onechar[i][0];
+        if (c==d)
+            return 1;
+    }
+    return 0;
+}
+
+/**
+ * Function that returns 1 if the char is an operator
+ * @param c Char
+ * @return 1 if is an operator0 otherwise
+ */
+int isOp(char c) {
+    for (int i=0; i < (sizeoperators-1) ;i++){
+        char d = operators[i][0];
         if (c==d)
             return 1;
     }
@@ -69,15 +82,17 @@ void strupp(char* beg) {
  * @param c
  */
 void printchar(char c){
-    printf(COLOR_MAGENTA);
-    if (c=='\n') {
-        printf("%s   Char: \'\\n\'\n", VTAG);
-    } else if (c=='\r') {
-        printf("%s   Char: \'\\r\'\n", VTAG);
-    } else {
-        printf("%s   Char: \'%c\'\n", VTAG, c);
+    if (config_verbose) {
+        printf(COLOR_MAGENTA);
+        if (c == '\n') {
+            printf("%s   Char: \'\\n\'\n", VTAG);
+        } else if (c == '\r') {
+            printf("%s   Char: \'\\r\'\n", VTAG);
+        } else {
+            printf("%s   Char: \'%c\'\n", VTAG, c);
+        }
+        printf(COLOR_RESET);
     }
-    printf(COLOR_RESET);
 }
 
 /**
@@ -218,6 +233,7 @@ char process_comment(char c) {
                 c = ' ';
                 break;
             default:
+                putChar(j);
                 break;
         }
     }
@@ -283,7 +299,6 @@ int process_number(char c) {
                         break;
                     case 'e':
                     case 'E':
-                        printf(COLOR_RED"%s It's an exponential number\n"COLOR_RESET, VTAG);
                         num_suffix = true;
                         appendChar(c);
                         char l = getChar();
@@ -301,7 +316,8 @@ int process_number(char c) {
                             putChar(c);
                         } else {
                             // Error
-                            printf(COLOR_RED"-- Error: Number bad formed --\n"COLOR_RESET);
+                            printf(COLOR_RED"-- Error: Number bad formed, line %d, col %d --\n"COLOR_RESET, getLine(), getCol());
+                            status = ERROR;
                         }
                         ret = 0;
                         break;
@@ -328,7 +344,6 @@ int process_number(char c) {
                         break;
                     case 'e':
                     case 'E':
-                        printf(COLOR_RED"%s It's an exponential number\n"COLOR_RESET, VTAG);
                         num_suffix = true;
                         appendChar(c);
                         char l = getChar();
@@ -339,12 +354,18 @@ int process_number(char c) {
                         }
                         commdepth = 3;
                         break;
+                    case '.':
+                        printf(COLOR_RED"-- Error: Real number bad formed, line %d, col %d --\n"COLOR_RESET, getLine(), getCol());
+                        status = ERROR;
+                        ret = 0;
+                        break;
                     default:
                         if (isDelimiter(c)) {
                             putChar(c);
                         } else {
                             // Error
-                            printf(COLOR_RED"-- Error: Number bad formed --\n"COLOR_RESET);
+                            printf(COLOR_RED"-- Error: Number bad formed, line %d, col %d --\n"COLOR_RESET, getLine(), getCol());
+                            status = ERROR;
                         }
                         ret = 0;
                         break;
@@ -369,7 +390,8 @@ int process_number(char c) {
                             putChar(c);
                         } else {
                             // Error
-                            printf(COLOR_RED"-- Error: Hexadecimal number bad formed --\n"COLOR_RESET);
+                            printf(COLOR_RED"-- Error: Hexadecimal number bad formed, line %d, col %d --\n"COLOR_RESET, getLine(), getCol());
+                            status = ERROR;
                         }
                         ret = 0;
                         break;
@@ -380,7 +402,8 @@ int process_number(char c) {
                 if (isdigit(c)){
                     appendChar(c);
                 } else {
-                    printf(COLOR_RED"-- Error: Exponential number bad formed --\n"COLOR_RESET);
+                    printf(COLOR_RED"-- Error: Exponential number bad formed, line %d, col %d --\n"COLOR_RESET, getLine(), getCol());
+                    status = ERROR;
                     ret = 0;
                 }
                 break;
@@ -389,7 +412,8 @@ int process_number(char c) {
                 if (c=='1' || c=='0'){
                     appendChar(c);
                 } else {
-                    printf(COLOR_RED"-- Error: Binary number bad formed --\n"COLOR_RESET);
+                    printf(COLOR_RED"-- Error: Binary number bad formed, line %d, col %d --\n"COLOR_RESET, getLine(), getCol());
+                    status = ERROR;
                     ret = 0;
                 }
                 break;
@@ -400,7 +424,42 @@ int process_number(char c) {
     if (ret == 0){
         appendChar('\0');
         putChar(c);
-        printf(COLOR_RED"%s The number is <%s>\n"COLOR_RESET, VTAG, word);
+//        printf(COLOR_RED"%s The number is <%s>\n"COLOR_RESET, VTAG, word);
+    }
+    return ret;
+}
+
+/**
+ * Process a multichar operation
+ * @param c
+ * @return
+ */
+char process_multicharop(char c) {
+    char ret = '\0';
+    if (isOp(c)){
+        char l = getChar();
+        if (isOp(l)) {
+            appendChar(c);
+            while (isOp(l)) {
+                appendChar(l);
+                l = getChar();
+            }
+            appendChar('\0');
+//            printf(COLOR_RED"%s The multichar operator is <%s>\n"COLOR_RESET, VTAG, word);
+
+            if (ht_get(hashtable, word)!=NULL){
+                status = OPERATOR;
+            } else {
+                printf(COLOR_RED"-- Error: Bad operator, line %d, col %d --\n"COLOR_RESET, getLine(), getCol());
+                status = ERROR;
+            }
+        }
+        ret = l;
+    } else {
+        ret = c;
+    }
+    if (status!=OPERATOR){
+        resetWord();
     }
     return ret;
 }
@@ -417,10 +476,13 @@ struct item *next_comp(){
 
         if (status == VIRGIN) {
             c = process_comment(c);
+            if (status != COMMENT){
+                c = process_multicharop(c);
+            }
         }
         printchar(c);
 
-        if (status != COMMENT) {
+        if (status != COMMENT && status !=OPERATOR) {
             // No comment
             if (!(c == EOF || isDelimiter(c))) {
                 switch (status) {
@@ -475,6 +537,9 @@ struct item *next_comp(){
                     case ALFA:
                         appendChar(c);
                         break;
+                    case ERROR:
+                        putChar(c);
+                        break;
                     default:
                         printf(COLOR_RED"-- Error: Status deprecated --"COLOR_RESET);
                         break;
@@ -502,8 +567,9 @@ struct item *next_comp(){
                                     word[1] = '\0';
 
                                     printf("%s Ending symbol: \'%s\'\n", VTAG, word);
-
-                                    out = getinsert();
+                                    out = malloc(sizeof(struct item));
+                                    out->code = 0;
+                                    out->instance = strdup(word);
                                     status = ENDED;
                                 } else {
                                     continue;
@@ -512,8 +578,9 @@ struct item *next_comp(){
                         }
                         break;
                     case NUMBER: case STRING:
+                        printf("%s Ending thing: \'%s\'\n", VTAG, word);
                         out = malloc(sizeof(struct item));
-                        out->code = 65535;
+                        out->code = 0;
                         out->instance = strdup(word);
                         status = ENDED;
                         putChar(c);
@@ -536,8 +603,18 @@ struct item *next_comp(){
 
     resetWord();
     if (status==ERROR){
+        /*
+         * If there's an error, discard everything until delimiter or EOF
+         */
+        config_errors++;
         status = VIRGIN;
-        return NULL;
+        char l = getChar();
+        printchar(l);
+        while (!isDelimiter(l) && l!=EOF){
+            l = getChar();
+            printchar(l);
+        }
+        return next_comp();
     }
     status = VIRGIN;
     return out;

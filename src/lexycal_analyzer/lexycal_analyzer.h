@@ -9,6 +9,7 @@
 #include "../external/model/hash.h"
 #include "../config.h"
 #include <ctype.h>
+#include <stdbool.h>
 
 struct item *next_comp();
 
