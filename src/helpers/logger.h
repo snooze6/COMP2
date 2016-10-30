@@ -1,7 +1,3 @@
-//
-// Created by arman on 30/10/2016.
-//
-
 #ifndef P1_COMP_LOGGER_H
 #define P1_COMP_LOGGER_H
 

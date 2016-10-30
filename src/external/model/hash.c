@@ -1,4 +1,6 @@
 #include "hash.h"
+#include "../../config.h"
+#include "../../lexycal_analyzer/lexycal_analyzer.h"
 
 // Create new hash table
 hashtable_t *ht_create( int size ) {
@@ -24,6 +26,8 @@ hashtable_t *ht_create( int size ) {
     }
 
     hashtable->size = size;
+
+    hashtable->keys = NULL;
 
     return hashtable;
 }
@@ -99,18 +103,12 @@ void ht_set( hashtable_t *hashtable, char *key, struct item *value ) {
         if( next == hashtable->table[ bin ] ) {
             newpair->next = next;
             hashtable->table[ bin ] = newpair;
-//            if (strstr(value->instance, "\n")) {
-//                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", "\\n", value->code, bin);
-//            } else if (strstr(value->instance, "\r")){
-//                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", "\\r", value->code, bin);
-//            } else {
-//                printf("[DEBUG] - Inserting:  %20s - %d - %d\n", value->instance, value->code, bin);
-//            }
+            hashtable->keys = ol_insert(hashtable->keys, key);
 
             // We're at the end of the linked list in this bin.
         } else if ( next == NULL ) {
             last->next = newpair;
-//            printf("[DEBUG] - Adding end: %20s - %d - %d\n", value->instance, value->code, bin);
+            hashtable->keys = ol_insert(hashtable->keys, key);
 
             // We're in the middle of the list.
         } else  {
@@ -142,5 +140,39 @@ struct item *ht_get( hashtable_t *hashtable, char *key ) {
     } else {
         return pair->value;
     }
+}
 
+void ht_print(hashtable_t *hashtable){
+    printf(COLOR_MAGENTA"< HASH TABLE CONTENT >\n");
+
+    ol_node *p; p = hashtable->keys;
+
+    while(p) {
+        struct item *i = ht_get(hashtable,p->data);
+        printf("  "VTAG" %s - %d\n", i->instance, i->code);
+        p = p->ptr;
+    }
+    printf("  "VTAG" Number of Identifiers: %d\n", count);
+    printf("</HASH TABLE CONTENT >\n"COLOR_RESET);
+}
+
+void ht_print_identifiers(hashtable_t *hashtable){
+    printf(COLOR_MAGENTA"< HASH TABLE IDENTIFIERS >\n");
+
+    ol_node *p; p = hashtable->keys;
+
+    while(p) {
+        struct item *i = ht_get(hashtable,p->data);
+        if (i->code>=500) {
+            printf("  "VTAG" %s - %d\n", i->instance, i->code);
+        }
+        p = p->ptr;
+    }
+    printf("</HASH TABLE IDENTIFIERS >\n"COLOR_RESET);
+}
+
+void ht_free(hashtable_t *hashtable){
+    ol_free_list(hashtable->keys);
+    free(hashtable->table);
+    hashtable->size = 0;
 }

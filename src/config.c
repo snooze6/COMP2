@@ -11,7 +11,7 @@ char * onechar[] = {
         // Operators
         "+","-","*","=","!","~","&","|","<",">","%","^"
         // Endings
-        " ",";", "\n","\r"," ",
+        " ",";", "\n","\r"," ","\t",
         // Comments
         "/"
 };
@@ -20,7 +20,7 @@ char * operators[] = {
     "+","-","*","=","!","~","&","|","<",">","%","^","/"
 };
 
-int sizeonechar = 26;
+int sizeonechar = 27;
 int sizeoperators = 13;
 bool config_verbose = false;
 int config_errors = 0;

@@ -1,6 +1,6 @@
 #include "lexycal_analyzer.h"
 
-typedef enum {VIRGIN, ERROR, ENDED, NUMBER, ALFA, COMMENT, STRING, OPERATOR} status_t;
+typedef enum {VIRGIN, ERROR, ENDED, NUMBER, ALFA, COMMENT, STRING, OPERATOR, FINISHED} status_t;
 status_t status = VIRGIN;
 
 // Dynamic word
@@ -88,6 +88,8 @@ void printchar(char c){
             printf("%s   Char: \'\\n\'\n", VTAG);
         } else if (c == '\r') {
             printf("%s   Char: \'\\r\'\n", VTAG);
+        } else if (c==EOF){
+            printf("%s   Char: \'EOF\'\n", VTAG);
         } else {
             printf("%s   Char: \'%c\'\n", VTAG, c);
         }
@@ -145,12 +147,18 @@ char process_comment(char c) {
                  *  - Word is null
                  */
                 status = COMMENT;
-                printf("%s    Commented: //", VTAG);
+                if (config_verbose) {
+                    printf("%s    Commented: //", VTAG);
+                }
                 while ((k = getChar()) != '\n'){
-                    printf("%c", k);
+                    if (config_verbose) {
+                        printf("%c", k);
+                    }
                     ;
                 }
-                printf("\n");
+                if (config_verbose){
+                    printf("\n");
+                }
                 c = getChar();
                 break;
             case '*':
@@ -163,7 +171,9 @@ char process_comment(char c) {
                      * - Return ' ' (because in D you can do int\/**\/a ant it compiles)
                      * - Word is null
                      */
-                    printf("%s    Commented:\n/*%c", VTAG, l);
+                    if (config_verbose) {
+                        printf("%s    Commented:\n/*%c", VTAG, l);
+                    }
                     while ((k = getChar())) {
                         if (k == '*') {
                             k = getChar();
@@ -171,10 +181,14 @@ char process_comment(char c) {
                                 break;
                             }
                         } else {
-                            printf("%c", k);;
+                            if (config_verbose) {
+                                printf("%c", k);
+                            }
                         }
                     }
-                    printf("*/\n");
+                    if (config_verbose) {
+                        printf("*/\n");
+                    }
                     resetWord();
                     c = ' ';
                 } else {
@@ -184,51 +198,76 @@ char process_comment(char c) {
                      * - Return ' ' (because of D)
                      * - Word is the commentary itself
                      */
-                    printf("%s    Commented (doc):\n/**", VTAG);
-                    appendChar('/'); appendChar('*'); appendChar('*');
-                    while ((k = getChar())) {
-                        appendChar(k);
-
-                        if (k!='\r'){
-                            if (k == '*') {
-                                k = getChar();
-                                if (k == '/') {
-                                    break;
-                                }
-                            } else {
-                                printf("%c", k);;
-                            }
+                    char m = getChar();
+                    if (m ==  '/'){
+                        if (config_verbose) {
+                            printf("%s    Commented: /**/\n", VTAG);
                         }
+                        c = ' ';
+                    } else {
+                        putChar(m);
+                        if (config_verbose) {
+                            printf("%s    Commented (doc):\n/**", VTAG);
+                        }
+                        appendChar('/'); appendChar('*'); appendChar('*');
+                        while ((k = getChar())) {
+                            appendChar(k);
 
+                            if (k!='\r'){
+                                if (k == '*') {
+                                    k = getChar();
+                                    if (k == '/') {
+                                        break;
+                                    }
+                                } else {
+                                    if (config_verbose) {
+                                        printf("%c", k);
+                                    }
+                                }
+                            }
+
+                        }
+                        if (config_verbose) {
+                            printf("*/\n");
+                        }
+                        appendChar('/');
+                        c = ' ';
                     }
-                    printf("*/\n");
-                    appendChar('/');
-                    c = ' ';
                 }
                 break;
             case '+':
                 commdepth ++;
                 status = COMMENT;
-                printf("%s    Commented:\n/+",VTAG);
+                if (config_verbose) {
+                    printf("%s    Commented:\n/+", VTAG);
+                }
                 while (commdepth!=0){
                     k = getChar();
-                    printf("%c", k);
+                    if (config_verbose) {
+                        printf("%c", k);
+                    }
                     if (k=='/'){
                         l = getChar();
-                        printf("%c", l);
+                        if (config_verbose) {
+                            printf("%c", l);
+                        }
                         if (l=='+'){
                             commdepth++;
                         }
                     }
                     if (k=='+'){
                         l = getChar();
-                        printf("%c", l);
+                        if (config_verbose) {
+                            printf("%c", l);
+                        }
                         if (l=='/'){
                             commdepth--;
                         }
                     }
                 }
-                printf("\n");
+                if (config_verbose) {
+                    printf("\n");
+                }
                 resetWord();
                 c = ' ';
                 break;
@@ -257,10 +296,18 @@ int process_string(char c) {
         } else if (c==strini) {
             appendChar(c);
             appendChar('\0');
-            printf("%s    String:\n'%s'\n",VTAG, word);
+            if (config_verbose) {
+                printf("%s    String:\n'%s'\n", VTAG, word);
+            }
             return 0;
-        } else {
+        } else if (c!= EOF){
             appendChar(c);
+        } else {
+            // Error
+            printf(COLOR_RED"-- Error: String bad formed, line %d, col %d --\n"COLOR_RESET, getLine(), getCol());
+            status = ERROR;
+            putChar(c);
+            return 0;
         }
     }
     return 1;
@@ -453,8 +500,11 @@ char process_multicharop(char c) {
                 printf(COLOR_RED"-- Error: Bad operator, line %d, col %d --\n"COLOR_RESET, getLine(), getCol());
                 status = ERROR;
             }
+            ret = l;
+        } else {
+            putChar(l);
+            ret = c;
         }
-        ret = l;
     } else {
         ret = c;
     }
@@ -469,12 +519,18 @@ char process_multicharop(char c) {
  * @return Lexycal component
  */
 struct item *next_comp(){
-    printf(COLOR_CYAN"%s < Componente Léxico >\n"COLOR_RESET, VTAG);
+    if (status == FINISHED){
+        return NULL;
+    }
+    char c;
+    if (config_verbose) {
+        printf(COLOR_CYAN"%s < Componente Léxico >\n"COLOR_RESET, VTAG);
+    }
     struct item *out = NULL;
-    while (status!=ERROR && status!=ENDED){
-        char c; c = getChar();
+    while (status!=ERROR && status!=ENDED && status!=FINISHED){
+        c = getChar();
 
-        if (status == VIRGIN) {
+        if (status == VIRGIN && c!=EOF) {
             c = process_comment(c);
             if (status != COMMENT){
                 c = process_multicharop(c);
@@ -525,6 +581,7 @@ struct item *next_comp(){
                             if (c=='"' || c=='\''){
                                 strini = c;
                                 status = STRING;
+                                c = getChar();
                                 while (process_string(c)) {
                                     c = getChar();
                                     printchar(c);
@@ -546,6 +603,16 @@ struct item *next_comp(){
                 }
             } else {
                 switch (status) {
+                    case NUMBER: case STRING:
+                        if (config_verbose) {
+                            printf("%s Ending thing: \'%s\'\n", VTAG, word);
+                        }
+                        out = malloc(sizeof(struct item));
+                        out->code = 0;
+                        out->instance = strdup(word);
+                        status = ENDED;
+                        putChar(c);
+                        break;
                     default:
                         // Lexycal component
                         if (word != NULL) {
@@ -554,7 +621,9 @@ struct item *next_comp(){
                             strupp(word);
                             // Return char to input system
                             putChar(c);
-                            printf("%s End word: \'%s\'\n", VTAG, word);
+                            if (config_verbose){
+                                printf("%s End word: \'%s\'\n", VTAG, word);
+                            }
 
                             out = getinsert();
                             status = ENDED;
@@ -566,24 +635,23 @@ struct item *next_comp(){
                                     word[0] = c;
                                     word[1] = '\0';
 
-                                    printf("%s Ending symbol: \'%s\'\n", VTAG, word);
+                                    if (config_verbose) {
+                                        printf("%s Ending symbol: \'%s\'\n", VTAG, word);
+                                    }
                                     out = malloc(sizeof(struct item));
                                     out->code = 0;
                                     out->instance = strdup(word);
-                                    status = ENDED;
+
+                                    if (c==EOF){
+                                        status = FINISHED;
+                                    } else {
+                                        status = ENDED;
+                                    }
                                 } else {
                                     continue;
                                 }
                             }
                         }
-                        break;
-                    case NUMBER: case STRING:
-                        printf("%s Ending thing: \'%s\'\n", VTAG, word);
-                        out = malloc(sizeof(struct item));
-                        out->code = 0;
-                        out->instance = strdup(word);
-                        status = ENDED;
-                        putChar(c);
                         break;
                 }
             }
@@ -592,15 +660,20 @@ struct item *next_comp(){
             // Comment
             if (word != NULL){
                 // Documentation comment (Lexical component)
-                out = getinsert();
+                out = malloc(sizeof(struct item));
+                out->code = 0;
+                out->instance = strdup(word);
                 status = ENDED;
+                putChar(c);
             } else {
                 status = VIRGIN;
             }
         }
     }
-    printf(COLOR_CYAN"%s </Componente Léxico >\n"COLOR_RESET, VTAG);
-
+    if (config_verbose) {
+        printf(COLOR_CYAN"%s </Componente Léxico >\n"COLOR_RESET, VTAG);
+    }
+    
     resetWord();
     if (status==ERROR){
         /*
@@ -614,9 +687,12 @@ struct item *next_comp(){
             l = getChar();
             printchar(l);
         }
+        if (l==EOF) {putChar(l);}
         return next_comp();
     }
-    status = VIRGIN;
+    if (status != FINISHED){
+        status = VIRGIN;
+    }
     return out;
 
 }

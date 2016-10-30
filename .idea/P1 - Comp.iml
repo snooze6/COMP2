@@ -15,7 +15,9 @@
       <sourceFolder url="file://$MODULE_DIR$/src/input_system/input_system.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/config.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/external/model/hash.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/external/model/list.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/external/model/hash.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/external/model/list.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.5.2 (C:\tools\python3\python.exe)" jdkType="Python SDK" />

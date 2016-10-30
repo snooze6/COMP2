@@ -8,11 +8,7 @@ if __name__ == "__main__":
 
     dest = open(defname, 'w')
 
-    dest.write('//\n' +
-            '// Created by arman on 11/10/2016.\n' +
-            '//\\\n' +
-            '\n' +
-            '#ifndef P1_COMP_DEFINITIONS_H\n' +
+    dest.write('#ifndef P1_COMP_DEFINITIONS_H\n' +
             '#define P1_COMP_DEFINITIONS_H\n' +
             '\n')
 

@@ -1,7 +1,3 @@
-//
-// Created by arman on 11/10/2016.
-//
-
 #ifndef P1_COMP_HASH_H
 #define P1_COMP_HASH_H
 
@@ -9,6 +5,7 @@
 #include <stdio.h>
 #include <limits.h>
 #include <string.h>
+#include "list.h"
 
 //#define _XOPEN_SOURCE 500 /* Enable certain library functions (strdup) on linux.  See feature_test_macros(7) */
 
@@ -27,6 +24,7 @@ typedef struct entry_s entry_t;
 
 struct hashtable_s {
 	int size;
+    ol_node *keys;
 	struct entry_s **table;
 };
 
@@ -43,5 +41,9 @@ entry_t *ht_newpair( char *key, struct item *value );
 void ht_set( hashtable_t *hashtable, char *key, struct item *value );
 // Retrieve a key-value pair from a hash table.
 struct item *ht_get( hashtable_t *hashtable, char *key );
+
+void ht_print(hashtable_t *hashtable);
+void ht_print_identifiers(hashtable_t *hashtable);
+void ht_free(hashtable_t *hashtable);
 
 #endif //P1_COMP_HASH_H

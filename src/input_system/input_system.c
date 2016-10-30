@@ -5,6 +5,13 @@ char c = '\0';
 int actual_line = 1;
 int actual_col = 0;
 
+// Blocks
+char *bA, *bB, *aux;
+// Pointers
+int forward;
+
+size_t _TAM_MAX_LEXEMA = 255;
+
 /**
  * Set file to read
  * @param filename that we want to read
@@ -17,6 +24,17 @@ int setFile(char *filename){
     if (working_file == NULL) {
         return -1;
     } else {
+        {
+            // Alloc memory
+            bA = (char *) malloc(_TAM_MAX_LEXEMA + 1 * sizeof(char)); //reservamos para n chars + EOF
+            bB = (char *) malloc(_TAM_MAX_LEXEMA + 1 * sizeof(char)); //reservamos para n chars + EOF
+            forward = 0;
+
+            // Load first block
+            int num_leidos = (int) fread(bA, sizeof(char), _TAM_MAX_LEXEMA, working_file);
+            // Fread did not read EOF
+            bA[num_leidos] = EOF; //indicamos final bloque
+        }
         return 0;
     }
 }
@@ -42,14 +60,29 @@ int getCol(){
  * @return The char
  */
 char getChar(){
-//    getchar();
     if (working_file != NULL) {
         if (c != '\0'){
             char j = c;
             c = '\0';
             return j;
         } else {
-            char j = (char) getc(working_file);
+            char k = bA[forward];
+
+            if (k == EOF) {
+                if (forward == (_TAM_MAX_LEXEMA)) {
+                    int num_leidos = (int) fread(bA, sizeof (char), _TAM_MAX_LEXEMA, working_file);
+                    bA[num_leidos] = EOF;
+                    forward = 0;
+                    k = bA[forward];
+
+                } else {
+                    return k;
+                }
+            }
+            forward++;
+
+            char j = k;
+//            char j = (char) getc(working_file);
             if (j=='\n'){
                 actual_line++;
                 actual_col = 0;
@@ -75,6 +108,8 @@ char putChar(char a){
             printf("%s     Returning char \'\\n\'\n", VTAG);
         } else if (c == '\r') {
             printf("%s     Returning char \'\\r\'\n", VTAG);
+        } else if (c==EOF){
+            printf("%s     Returning char \'EOF\'\n", VTAG);
         } else {
             printf("%s     Returning char \'%c\'\n", VTAG, a);
         }

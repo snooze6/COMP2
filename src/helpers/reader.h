@@ -1,7 +1,3 @@
-//
-// Created by arman on 18/10/2016.
-//
-
 #ifndef P1_COMP_READER_H
 #define P1_COMP_READER_H
 
