@@ -1,6 +1,5 @@
-string s = "Hello \"World";
-string j = "asdfsfdsa
-asdfsaf"
+double[] x = [0b1, 2, 3, 4, 5, 6.5, 7, 7.5, 8_000/1.0e+03, 8.5];
+double[] y = [1, 2, 3, 3.2, 3.4, 40e-1, 4.2, 4.3, 4.35, 4.37];
 
 import std.stdio;
 import/+/+Hell+/+/std.algorithm.iteration;

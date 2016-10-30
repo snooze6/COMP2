@@ -16,7 +16,6 @@ int count = 0, id_start = 500;
 char strini;
 // If the number has suffix
 bool num_suffix = false;
-bool num_first = true;
 
 /**
  * Add a char to a dynamic String
@@ -260,85 +259,121 @@ int process_string(char c) {
  * @return
  */
 int process_number(char c) {
-    switch (commdepth) {
-        case 0:
-            // No point
-            switch(c){
-                case '0' ... '9':
-                    appendChar(c);
-                    break;
-                case '.':
-                    appendChar(c);
-                    commdepth = 1;
-                    break;
-                case 'f': case 'F': case'L': case 'i':
-                    appendChar(c);
-                    num_suffix = true;
-                case '_':
-                    break;
-                default:
-                    if (isDelimiter(c)){
-                        putChar(c);
-                        return 0;
-                    } else if (num_first == true && (c == 'x' || c=='X')){
+    int ret = 1;
+    if (isDelimiter(c) && c!='.') {
+        ret = 0;
+    } else {
+        switch (commdepth) {
+            case 0:
+                // No point
+                switch (c) {
+                    case '0' ... '9':
                         appendChar(c);
-                        commdepth = 2;
-                    } else {
-                        // Error
-                        return 0;
-                    }
-            }
-            break;
-        case 1:
-            // Point already present
-            switch(c) {
-                case '0' ... '9':
-                    appendChar(c);
-                    break;
-                case '_':
-                    break;
-                case 'f': case 'F': case'L': case 'i':
-                    if (num_suffix) {
-                        // Error
-                        return 0;
-                    } else {
+                        break;
+                    case '.':
+                        appendChar(c);
+                        commdepth = 1;
+                        break;
+                    case 'f':
+                    case 'F':
+                    case 'L':
+                    case 'i':
+                        appendChar(c);
                         num_suffix = true;
-                    }
-                default:
-                    if (isDelimiter(c)){
-                        putChar(c);
-                    } else {
-                        // Error
-                    }
-                    return 0;
-            }
-        case 2:
-            // Hexadecimal
-            switch(c) {
-                case '0' ... '9':
+                    case 'e':
+                    case 'E':
+                        num_suffix = true;
+                        commdepth = 3;
+                    case '_':
+                        break;
+                    default:
+                        if (isDelimiter(c)) {
+                            putChar(c);
+                        } else {
+                            // Error
+                            printf(COLOR_RED"-- Error: Number bad formed --"COLOR_RESET);
+                        }
+                        ret = 0;
+                }
+                break;
+            case 1:
+                // Point already present
+                switch (c) {
+                    case '0' ... '9':
+                        appendChar(c);
+                        break;
+                    case '_':
+                        break;
+                    case 'f':
+                    case 'F':
+                    case 'L':
+                    case 'i':
+                        if (num_suffix) {
+                            // Error
+                            ret = 0;
+                        } else {
+                            num_suffix = true;
+                        }
+                    case 'e':
+                    case 'E':
+                        printf(COLOR_RED"%s It's an exponential number\n"COLOR_RESET, VTAG);
+                        num_suffix = true;
+                        commdepth = 3;
+                    default:
+                        if (isDelimiter(c)) {
+                            putChar(c);
+                        } else {
+                            // Error
+                            printf(COLOR_RED"-- Error: Number bad formed --"COLOR_RESET);
+                        }
+                        ret = 0;
+                }
+            case 2:
+                // Hexadecimal
+                switch (c) {
+                    case '0' ... '9':
+                        appendChar(c);
+                        break;
+                    case 'a' ... 'f':
+                        appendChar(toupper(c));
+                        break;
+                    case 'A' ... 'F':
+                        appendChar(c);
+                        break;
+                    case '_':
+                        break;
+                    default:
+                        if (isDelimiter(c)) {
+                            putChar(c);
+                        } else {
+                            // Error
+                            printf(COLOR_RED"-- Error: Hexadecimal number bad formed --"COLOR_RESET);
+                        }
+                        ret = 0;
+                }
+                break;
+            case 3:
+                // Exponential
+                break;
+            case 4:
+                // Binary
+                if (c=='1' || c=='0'){
                     appendChar(c);
-                    break;
-                case 'a' ... 'f':
-                    appendChar(toupper(c));
-                    break;
-                case 'A' ... 'F':
-                    appendChar(c);
-                    break;
-                case '_':
-                    break;
-                default:
-                    if (isDelimiter(c)){
-                        putChar(c);
-                    } else {
-                        // Error
-                    }
-                    return 0;
-            }
-            break;
-        default:break;
+                } else {
+                    printf(COLOR_RED"-- Error: Binary number bad formed --"COLOR_RESET);
+                    ret = 0;
+                }
+                break;
+            default:
+                break;
+        }
     }
-    num_first = false;
-    return 1;
+    if (ret == 0){
+        appendChar('\0');
+        putChar(c);
+        printf(COLOR_RED"%s The number is <%s>\n"COLOR_RESET, VTAG, word);
+    }
+    return ret;
 }
 
 /**
@@ -364,46 +399,60 @@ struct item *next_comp(){
                      * This is the first char of the word so:
                      *  - If is number then it must be a number
                      *  - If it's not a number then it must be a keyword or a identifier
+                     *  - If it's a ' or a " then it's a string
                      */
                     case VIRGIN:
                         appendChar(c);
                         commdepth = 0;
                         if (isdigit(c)){
                             status = NUMBER;
-                            num_suffix = false;
-                            num_first = true;
+                            char l = getChar();
+                            switch (l) {
+                                case 'x':
+                                case 'X':
+                                    num_suffix = true;
+                                    appendChar(l);
+                                    commdepth = 2;
+                                    break;
+                                case 'b':
+                                case 'B':
+                                    appendChar(l);
+                                    num_suffix = true;
+                                    commdepth = 4;
+                                    break;
+                                default:
+                                    num_suffix = false;
+                                    putChar(l);
+                                    break;
+                            }
+                            c = getChar();
+                            while (process_number(c)) {
+                                c = getChar();
+                                printchar(c);
+                            }
                         } else {
                             if (c=='"' || c=='\''){
                                 strini = c;
                                 status = STRING;
+                                while (process_string(c)) {
+                                    c = getChar();
+                                    printchar(c);
+                                }
                             } else {
                                 status = ALFA;
                             }
                         }
                         break;
-                    case OK: case ALFA:
-                        if (status==OK){
-                            printf(COLOR_RED"-- Error --"COLOR_RESET);
-                        }
+                    case ALFA:
                         appendChar(c);
                         break;
-                    case NUMBER:
-                        while (process_number(c)) {
-                            c = getChar();
-                            printchar(c);
-                        }
-                    case STRING:
-                        while (process_string(c)) {
-                            c = getChar();
-                            printchar(c);
-                        }
-                    case ERROR:break;
-                    case ENDED:break;
-                    case COMMENT:break;
+                    default:
+                        printf(COLOR_RED"-- Error: Status deprecated --"COLOR_RESET);
+                        break;
                 }
             } else {
                 switch (status) {
-                    case ALFA:
+                    default:
                         // Lexycal component
                         if (word != NULL) {
                             // Word to uppercase
@@ -433,13 +482,7 @@ struct item *next_comp(){
                             }
                         }
                         break;
-                    case VIRGIN:break;
-                    case OK:break;
-                    case ERROR:break;
-                    case ENDED:break;
-                    case NUMBER:break;
-                    case COMMENT:break;
-                    case STRING:
+                    case NUMBER: case STRING:
                         out = malloc(sizeof(struct item));
                         out->code = 65535;
                         out->instance = strdup(word);
