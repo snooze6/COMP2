@@ -41,6 +41,7 @@ int main(int argc, char **argv) {
         printf(COLOR_MAGENTA"</Lexycal Analyzer >\n\n"COLOR_RESET);
 
         ht_print(hashtable);
+        printf("\n");
         ht_print_identifiers(hashtable);
 
         closeFile();

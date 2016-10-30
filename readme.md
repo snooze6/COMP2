@@ -87,14 +87,21 @@ isalpha(), isdigit(), isalnum(), atoi(), atof(), getc(), strcpy()
     3. ~~Extensiones...~~
 5. ~~Soportar strings~~
 6. ~~Sacar caracteres simples~~
-7. Entrada por bloques
+7. ~~Entrada por bloques~~
 8. ~~Errores~~
 9. ~~Operadores multicaracter~~
 
-### PREGUNTAS:
+### BUILD
 
-1. 1234f es componente léxico?
-2. \n es componente léxico?
-  - No y los espacios tampoco
-3. Errores
-4. ==
+```bash
+    mkdir build
+    cd build
+    cmake ..
+    make
+```
+
+### USAGE
+```bash
+    cd dist/bin
+    ./program <def.h> <source.d>
+```
