@@ -6,6 +6,7 @@
 #define P1_COMP_CONFIG_H
 
 #include "external/model/hash.h"
+#include "helpers/logger.h"
 
 #define ETAG "[+] -"
 #define VTAG "[-] -"

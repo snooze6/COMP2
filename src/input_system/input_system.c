@@ -6,6 +6,7 @@
 
 FILE *working_file = NULL;
 char c = '\0';
+int line = 0;
 
 int setFile(char *filename){
     working_file = fopen(filename, "r");
@@ -26,7 +27,11 @@ char getChar(){
             c = '\0';
             return j;
         } else {
-            return (char) getc(working_file);
+            char j = (char) getc(working_file);
+            if (j=='\n'){
+                line++;
+            }
+            return j;
         }
     } else {
         return EOF;

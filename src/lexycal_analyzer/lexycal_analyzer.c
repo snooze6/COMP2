@@ -260,7 +260,7 @@ int process_string(char c) {
  */
 int process_number(char c) {
     int ret = 1;
-    if (isDelimiter(c) && c!='.') {
+    if (isDelimiter(c) && c!='.' && !((commdepth==3 && (c=='+' || c=='-')))) {
         ret = 0;
     } else {
         switch (commdepth) {
@@ -280,10 +280,20 @@ int process_number(char c) {
                     case 'i':
                         appendChar(c);
                         num_suffix = true;
+                        break;
                     case 'e':
                     case 'E':
+                        printf(COLOR_RED"%s It's an exponential number\n"COLOR_RESET, VTAG);
                         num_suffix = true;
+                        appendChar(c);
+                        char l = getChar();
+                        if (l == '+' || l == '-'){
+                            appendChar(l);
+                        } else {
+                            putChar(l);
+                        }
                         commdepth = 3;
+                        break;
                     case '_':
                         break;
                     default:
@@ -291,9 +301,10 @@ int process_number(char c) {
                             putChar(c);
                         } else {
                             // Error
-                            printf(COLOR_RED"-- Error: Number bad formed --"COLOR_RESET);
+                            printf(COLOR_RED"-- Error: Number bad formed --\n"COLOR_RESET);
                         }
                         ret = 0;
+                        break;
                 }
                 break;
             case 1:
@@ -314,20 +325,31 @@ int process_number(char c) {
                         } else {
                             num_suffix = true;
                         }
+                        break;
                     case 'e':
                     case 'E':
                         printf(COLOR_RED"%s It's an exponential number\n"COLOR_RESET, VTAG);
                         num_suffix = true;
+                        appendChar(c);
+                        char l = getChar();
+                        if (l == '+' || l == '-'){
+                            appendChar(l);
+                        } else {
+                            putChar(l);
+                        }
                         commdepth = 3;
+                        break;
                     default:
                         if (isDelimiter(c)) {
                             putChar(c);
                         } else {
                             // Error
-                            printf(COLOR_RED"-- Error: Number bad formed --"COLOR_RESET);
+                            printf(COLOR_RED"-- Error: Number bad formed --\n"COLOR_RESET);
                         }
                         ret = 0;
+                        break;
                 }
+                break;
             case 2:
                 // Hexadecimal
                 switch (c) {
@@ -347,20 +369,27 @@ int process_number(char c) {
                             putChar(c);
                         } else {
                             // Error
-                            printf(COLOR_RED"-- Error: Hexadecimal number bad formed --"COLOR_RESET);
+                            printf(COLOR_RED"-- Error: Hexadecimal number bad formed --\n"COLOR_RESET);
                         }
                         ret = 0;
+                        break;
                 }
                 break;
             case 3:
                 // Exponential
+                if (isdigit(c)){
+                    appendChar(c);
+                } else {
+                    printf(COLOR_RED"-- Error: Exponential number bad formed --\n"COLOR_RESET);
+                    ret = 0;
+                }
                 break;
             case 4:
                 // Binary
                 if (c=='1' || c=='0'){
                     appendChar(c);
                 } else {
-                    printf(COLOR_RED"-- Error: Binary number bad formed --"COLOR_RESET);
+                    printf(COLOR_RED"-- Error: Binary number bad formed --\n"COLOR_RESET);
                     ret = 0;
                 }
                 break;
@@ -411,12 +440,12 @@ struct item *next_comp(){
                                 case 'x':
                                 case 'X':
                                     num_suffix = true;
-                                    appendChar(l);
+                                    appendChar(l); printchar(l);
                                     commdepth = 2;
                                     break;
                                 case 'b':
                                 case 'B':
-                                    appendChar(l);
+                                    appendChar(l); printchar(l);
                                     num_suffix = true;
                                     commdepth = 4;
                                     break;
@@ -425,7 +454,7 @@ struct item *next_comp(){
                                     putChar(l);
                                     break;
                             }
-                            c = getChar();
+                            c = getChar(); printchar(c);
                             while (process_number(c)) {
                                 c = getChar();
                                 printchar(c);
@@ -487,6 +516,7 @@ struct item *next_comp(){
                         out->code = 65535;
                         out->instance = strdup(word);
                         status = ENDED;
+                        putChar(c);
                         break;
                 }
             }
