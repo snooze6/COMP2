@@ -1,9 +1,7 @@
 
 #include "external/model/hash.h"
-#include "external/model/list.h"
 #include "helpers/reader.h"
 #include "input_system/input_system.h"
-#include "config.h"
 #include "lexycal_analyzer/lexycal_analyzer.h"
 
 int main(int argc, char **argv) {

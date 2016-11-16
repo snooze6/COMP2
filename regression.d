@@ -1,5 +1,3 @@
-caimportca
-"asdfsafsa"
 import std.stdio;
 import/+/+Hell+/+/std.algorithm.iteration;
 import/*asd*/std.exception;

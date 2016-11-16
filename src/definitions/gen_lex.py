@@ -12,6 +12,8 @@ if __name__ == "__main__":
         """%{
     #include <stdio.h>
     #include "definitions.h"
+    #include "../external/model/hash.h"
+    #include "../config.h"
 
     int nested_depth = 0;
 %}
@@ -47,7 +49,7 @@ WS          [ \\r\\n\\t]*
   \\n                              {}
 }
 <NESTED_COMMENT>{
-  "/+"                            {nested_depth++; printf("<LEVEL UP!>"); }
+  "/+"                            {nested_depth++;}
   "+/"                            {
                                     if (nested_depth==0) {
                                       printf("<NESTED_COMMENT>");
@@ -55,7 +57,6 @@ WS          [ \\r\\n\\t]*
                                       return 468;
                                     } else {
                                       nested_depth--;
-                                      printf("<LEVEL DOWN!>");
                                     };
                                   }
   .                               {}
@@ -63,10 +64,10 @@ WS          [ \\r\\n\\t]*
 }
 <INITIAL>{
   "/**/"                          {printf("<MULTILINE_COMMENT>"); BEGIN(INITIAL); return 468; }
-  [/\*\*[.|\\n]*\*/]                     {printf("<DOCUMENTATION_COMMENT>"); return 468;}
   "/*"                            {BEGIN(MULTILINE_COMMENT);}
   "/+"                            {BEGIN(NESTED_COMMENT);}
   "/++/"                          {printf("<NESTED_COMMENT>"); return 468; }
+  [/]"**"[^*|/]*"*"+([^*/][^*]*"*"+)*[/] {printf("<DOCUMENTATION_COMMENT>"); return 468;}
 """)
 
     with open("reserved.txt") as f:
@@ -149,14 +150,26 @@ WS          [ \\r\\n\\t]*
             dest.write('  '+m['regex'] + (' ' * (32 - len(m['regex']))) + m['function'] + '\n')
 
     dest.write('}\n%%')
-#     dest.write(
-#         """
-#
-# int yyerror(const char *msg) {
-#     std::cerr << "FlexError:" << msg; return 0;
-# }
-# """
-#     )
+    dest.write(
+        """
+
+int main(int argc, char **argv) {
+    printf(COLOR_MAGENTA"D Lexical_Analyzer v0.1\\n"COLOR_RESET);
+
+    if ( argc > 1 ) {
+            yyin = fopen( argv[1], "r" );
+            printf(COLOR_MAGENTA"Argumento\\n"COLOR_RESET);
+    } else {
+            yyin = stdin;
+            printf(COLOR_MAGENTA"Stdin\\n"COLOR_RESET);
+    }
+
+    while (yylex() != 0){}
+
+    return EXIT_SUCCESS;
+}
+"""
+    )
     dest.close()
 
     os.system("flex dlang.lex && gcc lex.yy.c -lfl -o dlangLexer && cat ../../regression.d | dlangLexer")

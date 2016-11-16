@@ -1,6 +1,8 @@
 %{
     #include <stdio.h>
     #include "definitions.h"
+    #include "../external/model/hash.h"
+    #include "../config.h"
 
     int nested_depth = 0;
 %}
@@ -36,7 +38,7 @@ WS          [ \r\n\t]*
   \n                              {}
 }
 <NESTED_COMMENT>{
-  "/+"                            {nested_depth++; //printf("<LEVEL UP!>"); }
+  "/+"                            {nested_depth++;}
   "+/"                            {
                                     if (nested_depth==0) {
                                       printf("<NESTED_COMMENT>");
@@ -44,7 +46,6 @@ WS          [ \r\n\t]*
                                       return 468;
                                     } else {
                                       nested_depth--;
-                                      printf("<LEVEL DOWN!>");
                                     };
                                   }
   .                               {}
@@ -52,10 +53,10 @@ WS          [ \r\n\t]*
 }
 <INITIAL>{
   "/**/"                          {printf("<MULTILINE_COMMENT>"); BEGIN(INITIAL); return 468; }
-  [/\*\*[.|\n]*\*/]                     {printf("<DOCUMENTATION_COMMENT>"); return 468;}
   "/*"                            {BEGIN(MULTILINE_COMMENT);}
   "/+"                            {BEGIN(NESTED_COMMENT);}
   "/++/"                          {printf("<NESTED_COMMENT>"); return 468; }
+  [/]"**"[^*|/]*"*"+([^*/][^*]*"*"+)*[/] {printf("<DOCUMENTATION_COMMENT>"); return 468;}
   "ABSTRACT"                      {printf("ABSTRACT"); return 300;}
   "ALIAS"                         {printf("ALIAS"); return 301;}
   "ALIGN"                         {printf("ALIGN"); return 302;}
@@ -243,3 +244,19 @@ WS          [ \r\n\t]*
   {D}+"."{D}*({E})?{FS}?          {printf("REAL_CONSTANT"); return 1; }
 }
 %%
+
+int main(int argc, char **argv) {
+    printf(COLOR_MAGENTA"D Lexical_Analyzer v0.1\n"COLOR_RESET);
+
+    if ( argc > 1 ) {
+            yyin = fopen( argv[1], "r" );
+            printf(COLOR_MAGENTA"Argumento\n"COLOR_RESET);
+    } else {
+            yyin = stdin;
+            printf(COLOR_MAGENTA"Stdin\n"COLOR_RESET);
+    }
+
+    while (yylex() != 0){}
+
+    return EXIT_SUCCESS;
+}
