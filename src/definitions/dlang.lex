@@ -1,10 +1,20 @@
-
 %{
-#include <stdio.h>
-#include "definitions.h"
+    #include <stdio.h>
+    #include "definitions.h"
 %}
 
 %option caseless
+
+D			[0-9]
+L			[a-zA-Z_]
+H			[a-fA-F0-9]
+E			[Ee][+-]?{D}+
+FS			(f|F|l|L)
+IS			(u|U|l|L)*
+LP                      "{"
+RP                      "}"
+SM                      ";"
+CM                      "//"
 
 %%
 "ABSTRACT"                      {printf("ABSTRACT"); return 300;}
@@ -155,31 +165,41 @@
 "^^="                           {printf("^^="); return 445;}
 ">>>="                          {printf(">>>="); return 446;}
 "!<>="                          {printf("!<>="); return 447;}
-"."                               {printf("."); return 448;}
-","                               {printf(","); return 449;}
-"["                               {printf("["); return 450;}
-"]"                               {printf("]"); return 451;}
-"{"                               {printf("{"); return 452;}
-"}"                               {printf("}"); return 453;}
-"("                               {printf("("); return 454;}
-")"                               {printf(")"); return 455;}
-"+"                               {printf("+"); return 456;}
-"-"                               {printf("-"); return 457;}
-"*"                               {printf("*"); return 458;}
-"="                               {printf("="); return 459;}
-"!"                               {printf("!"); return 460;}
-"~"                               {printf("~"); return 461;}
-"&"                               {printf("&"); return 462;}
-"|"                               {printf("|"); return 463;}
-"<"                               {printf("<"); return 464;}
-">"                               {printf(">"); return 465;}
-"%"                               {printf("%"); return 466;}
-"^"                               {printf("^"); return 467;}
-[ ]                               {printf(" "); return 468;}
-[;]                               {printf(";"); return 469;}
-[\n]                              {printf("\n"); return 470;}
-[\r]                              {printf("\r"); return 471;}
-[ ]                               {printf(" "); return 472;}
-[\t]                              {printf("\t"); return 473;}
-[/]                               {printf("/"); return 474;}
+"."                             {printf("."); return 448;}
+","                             {printf(","); return 449;}
+"["                             {printf("["); return 450;}
+"]"                             {printf("]"); return 451;}
+"{"                             {printf("{"); return 452;}
+"}"                             {printf("}"); return 453;}
+"("                             {printf("("); return 454;}
+")"                             {printf(")"); return 455;}
+"+"                             {printf("+"); return 456;}
+"-"                             {printf("-"); return 457;}
+"*"                             {printf("*"); return 458;}
+"="                             {printf("="); return 459;}
+"!"                             {printf("!"); return 460;}
+"~"                             {printf("~"); return 461;}
+"&"                             {printf("&"); return 462;}
+"|"                             {printf("|"); return 463;}
+"<"                             {printf("<"); return 464;}
+">"                             {printf(">"); return 465;}
+"%"                             {printf("%"); return 466;}
+"^"                             {printf("^"); return 467;}
+[ ]                             {printf(" "); return 468;}
+[;]                             {printf(";"); return 469;}
+[\n]                            {printf("\n"); return 470;}
+[\r]                            {printf("\r"); return 471;}
+[ ]                             {printf(" "); return 472;}
+[\t]                            {printf("\t"); return 473;}
+[/]                             {printf("/"); return 474;}
+L?\"(\\.|[^\\"])*\"             {printf("STRING"); return 1; }
+{L}({L}|{D})*                   {printf("IDENTIFIER"); return 1; }
+{CM}[^\n]*                      {printf("COMMENT"); return 1; }
+0[xX]{H}+{IS}?                  {printf("INT_CONSTANT"); return 1; }
+0{D}+{IS}?                      {printf("INT_CONSTANT"); return 1; }
+{D}+{IS}?                       {printf("INT_CONSTANT"); return 1; }
+L?'(\\.|[^\\'])+'               {printf("INT_CONSTANT"); return 1; }
+{D}+{E}{FS}?                    {printf("REAL_CONSTANT"); return 1; }
+{D}*"."{D}+({E})?{FS}?          {printf("REAL_CONSTANT"); return 1; }
+{D}+"."{D}*({E})?{FS}?          {printf("REAL_CONSTANT"); return 1; }
 %%
