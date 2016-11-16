@@ -1,3 +1,7 @@
+## Práctica 2
+
+Lo mismo que la práctica 1 pero usando FLEX
+
 ## Práctica 1
 
 Construir un analizador léxico que devuelva los componentes léxicos que aparecen en el programa regression.d, codificado en el lenguajeD.
