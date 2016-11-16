@@ -8,9 +8,17 @@
       <sourceFolder url="file://$MODULE_DIR$/src/helpers/reader.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/helpers/reader.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/helpers/logger.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/flex/simple2/fed.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/flex/simple2/lex.yy.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/flex/simple/simple_shared.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/flex/simple/simple.tab.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/flex/simple/input.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/flex/simple/lex.yy.c" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/flex/simple/simple.tab.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/lexycal_analyzer/lexycal_analyzer.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/lexycal_analyzer/lexycal_analyzer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/definitions/definitions.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/definitions/lex.yy.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/input_system/input_system.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/input_system/input_system.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/config.h" isTestSource="false" />
@@ -25,12 +33,12 @@
     <orderEntry type="module-library">
       <library name="Header Search Paths">
         <CLASSES>
-          <root url="file://C:/tools/cygwin64/lib/gcc/x86_64-pc-cygwin/5.4.0/include" />
+          <root url="file://C:/tools/cygwin64/lib/gcc/x86_64-pc-cygwin/5.3.0/include" />
           <root url="file://C:/tools/cygwin64/usr/include" />
         </CLASSES>
         <LIBRARY_FILE />
         <SOURCES>
-          <root url="file://C:/tools/cygwin64/lib/gcc/x86_64-pc-cygwin/5.4.0/include" />
+          <root url="file://C:/tools/cygwin64/lib/gcc/x86_64-pc-cygwin/5.3.0/include" />
           <root url="file://C:/tools/cygwin64/usr/include" />
         </SOURCES>
       </library>

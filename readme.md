@@ -2,6 +2,12 @@
 
 Lo mismo que la práctica 1 pero usando FLEX
 
+flex example3.lex
+gcc lex.yy.c -lfl -o myLexer
+myLexer.exe
+
+flex dlang.lex && gcc lex.yy.c -lfl -o dlangLexer
+
 ## Práctica 1
 
 Construir un analizador léxico que devuelva los componentes léxicos que aparecen en el programa regression.d, codificado en el lenguajeD.
