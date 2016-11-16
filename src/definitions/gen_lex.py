@@ -12,6 +12,8 @@ if __name__ == "__main__":
         """%{
     #include <stdio.h>
     #include "definitions.h"
+
+    int nested_depth = 0;
 %}
 
 %option caseless
@@ -26,8 +28,45 @@ LP                      "{"
 RP                      "}"
 SM                      ";"
 CM                      "//"
+WS          [ \\r\\n\\t]*
+
+%s MULTILINE_COMMENT
+%s DOCUMENTATION_COMMENT
+%s NESTED_COMMENT
 
 %%
+
+<MULTILINE_COMMENT>{
+  "*/"                            {printf("<MULTILINE_COMMENT>"); BEGIN(INITIAL); return 468; }
+  .                               {}
+  \\n                              {}
+}
+<DOCUMENTATION_COMMENT>{
+  "*/"                            {printf("<DOCUMENTATION_COMMENT>"); BEGIN(INITIAL); return 468; }
+  .                               {}
+  \\n                              {}
+}
+<NESTED_COMMENT>{
+  "/+"                            {nested_depth++; printf("<LEVEL UP!>"); }
+  "+/"                            {
+                                    if (nested_depth==0) {
+                                      printf("<NESTED_COMMENT>");
+                                      BEGIN(INITIAL);
+                                      return 468;
+                                    } else {
+                                      nested_depth--;
+                                      printf("<LEVEL DOWN!>");
+                                    };
+                                  }
+  .                               {}
+  \\n                              {}
+}
+<INITIAL>{
+  "/**/"                          {printf("<MULTILINE_COMMENT>"); BEGIN(INITIAL); return 468; }
+  [/\*\*[.|\\n]*\*/]                     {printf("<DOCUMENTATION_COMMENT>"); return 468;}
+  "/*"                            {BEGIN(MULTILINE_COMMENT);}
+  "/+"                            {BEGIN(NESTED_COMMENT);}
+  "/++/"                          {printf("<NESTED_COMMENT>"); return 468; }
 """)
 
     with open("reserved.txt") as f:
@@ -48,29 +87,27 @@ CM                      "//"
 
         i = 300
         for line in content:
-            # dest.write('"'+str(line.rstrip())+'"'+(' '*(30-len(line.rstrip())))+'{printf("'+str(line.rstrip())+'"); return '+ str(i) + ';}\n')
-            dest.write('"' + str(line.rstrip()) + '"' + (' ' * (30 - len(line.rstrip()))) + '{printf("' + str(
+            dest.write('  "' + str(line.rstrip()) + '"' + (' ' * (30 - len(line.rstrip()))) + '{printf("' + str(
                 line.rstrip()) + '"); return ' + str(i) + ';}\n')
             i += 1
         for sym in symbols:
-            # dest.write('"'+str(sym)+'"'+(' '*(32-len(sym)))+'{printf("'+str(sym)+' - '+str(i)+'"); return '+ str(i) + ';}\n')
-            dest.write('"' + str(sym) + '"' + (' ' * (30 - len(sym))) + '{printf("' + str(sym) + '"); return ' + str(
+            dest.write('  "' + str(sym) + '"' + (' ' * (30 - len(sym))) + '{printf("' + str(sym) + '"); return ' + str(
                 i) + ';}\n')
             i += 1
         for sym in endings:
-            # dest.write('['+str(sym)+']'+(' '*(32-len(sym)))+'{printf("'+str(sym)+' - '+str(i)+'"); return '+ str(i) + ';}\n')
-            dest.write('[' + str(sym) + ']' + (' ' * (30 - len(sym))) + '{printf("' + str(sym) + '"); return ' + str(
+            dest.write('  [' + str(sym) + ']' + (' ' * (30 - len(sym))) + '{printf("' + str(sym) + '"); return ' + str(
                 i) + ';}\n')
             i += 1
 
         mine = [
             {
                 'regex': 'L?\\\"(\\\\.|[^\\\\"])*\\\"',
-                'function': '{printf("STRING"); return 1; }'
+                'function': '{printf("STRING_CONSTANT"); return 1; }'
             },
             {
                 'regex': '{L}({L}|{D})*',
-                'function': '{printf("IDENTIFIER"); return 1; }'
+                'function': '{printf("%s", yytext); return 1; }'
+                # 'function': '{printf("IDENTIFIER"); return 1; }'
             },
             {
                 'regex': '{CM}[^\\n]*',
@@ -109,9 +146,9 @@ CM                      "//"
             # Comentarios multilínea
         ]
         for m in mine:
-            dest.write(m['regex'] + (' ' * (32 - len(m['regex']))) + m['function'] + '\n')
+            dest.write('  '+m['regex'] + (' ' * (32 - len(m['regex']))) + m['function'] + '\n')
 
-    dest.write('%%')
+    dest.write('}\n%%')
 #     dest.write(
 #         """
 #
