@@ -19,17 +19,19 @@ if __name__ == "__main__":
 
     int nested_depth = 0;
     int identifiers = 500;
+    line = 1;
 %}
 
 %option caseless
 
 D			[0-9_]
 L			[a-zA-Z_]
-T			[a-zA-Z0-9_]
+T			[a-zA-Z0-9_.]
 A			[a-zA-Z]
 B           [01_]
 H			[a-fA-F0-9_]
 E			[Ee][+-]?{D}+
+EE			[Ee][+-]?{T}+
 FS			(f|F|l|L)
 IS			(u|U|l|L)*
 LP                      "{"
@@ -47,12 +49,12 @@ WS          [ \\r\\n\\t]*
 <MULTILINE_COMMENT>{
   "*/"                            {printf("<MULTILINE_COMMENT>"); BEGIN(INITIAL); return 468; }
   .                               {}
-  \\n                              {}
+  \\n                              {printf("\\n"); line++; printf("%3d - ", line);}
 }
 <DOCUMENTATION_COMMENT>{
   "*/"                            {printf("<DOCUMENTATION_COMMENT>"); BEGIN(INITIAL); return 468; }
   .                               {}
-  \\n                              {}
+  \\n                              {printf("\\n"); line++; printf("%3d - ", line);}
 }
 <NESTED_COMMENT>{
   "/+"                            {nested_depth++;}
@@ -66,14 +68,24 @@ WS          [ \\r\\n\\t]*
                                     };
                                   }
   .                               {}
-  \\n                              {}
+  \\n                              {printf("\\n"); line++; printf("%3d - ", line);}
 }
 <INITIAL>{
   "/**/"                          {printf("<MULTILINE_COMMENT>"); BEGIN(INITIAL); return 468; }
   "/*"                            {BEGIN(MULTILINE_COMMENT);}
   "/+"                            {BEGIN(NESTED_COMMENT);}
   "/++/"                          {printf("<NESTED_COMMENT>"); return 468; }
-  [/]"**"[^*|/]*"*"+([^*/][^*]*"*"+)*[/] {printf("<DOCUMENTATION_COMMENT>"); return 468;}
+  [/]"**"[^*|/]*"*"+([^*/][^*]*"*"+)*[/] {
+                                     printf("<DOCUMENTATION_COMMENT>");
+                                     int j = 0, i=0;
+                                     for (i=0; yytext[i]!='\\0'; i++){
+                                         if (yytext[i]=='\\n') j++;
+                                     }
+                                     for (i=0; i<j; i++){
+                                        printf("\\n"); line++; printf("%3d - ", line);
+                                     }
+                                     return 468;
+                                   }
 """)
 
     with open("reserved.txt") as f:
@@ -88,7 +100,7 @@ WS          [ \\r\\n\\t]*
             "+", "-", "*", "=", "!", "~", "&", "|", "<", ">", "%", "^"]
         endings = [
             # Endings
-            " ", ";", "\\n", "\\r", " ", "\\t",
+            " ", ";", "\\r", " ", "\\t",
             # Comments
             "/"]
 
@@ -110,7 +122,17 @@ WS          [ \\r\\n\\t]*
             # Strings
             {
                 'regex': 'L?\\\"(\\\\.|[^\\\\"])*\\\"',
-                'function': '{printf("STRING_CONSTANT"); return 1; }'
+                'function': """{
+                                    printf("STRING_CONSTANT");
+                                    int j = 0, i=0;
+                                    for (i=0; yytext[i]!='\\0'; i++){
+                                         if (yytext[i]=='\\n') j++;
+                                    }
+                                    for (i=0; i<j; i++){
+                                        printf("\\n"); line++; printf("%3d - ", line);
+                                     }
+                                    return 1;
+                                  }"""
             },
             # Identificadores
             {
@@ -127,10 +149,10 @@ WS          [ \\r\\n\\t]*
                                     }
                                     printf("%s(%d)", yytext, aux->code);
                                     return aux->code;
-                                  }
-"""
+                                  }"""
                 # 'function': '{printf("IDENTIFIER"); return 1; }'
             },
+            # Comentario monolínea
             {
                 'regex': '{CM}[^\\n]*',
                 'function': '{printf("COMMENT"); return 1; }'
@@ -144,10 +166,10 @@ WS          [ \\r\\n\\t]*
                 'regex': '0[bB]{B}+',
                 'function': '{printf("BIN_CONSTANT"); return 1; }'
             },
-            # {
-            #     'regex': '0{D}+{IS}?',
-            #     'function': '{printf("INT_CONSTANT"); return 1; }'
-            # },
+            {
+                'regex': '0{D}+{IS}?',
+                'function': '{printf("INT_CONSTANT"); return 1; }'
+            },
             {
                 'regex': '{D}+{IS}?',
                 'function': '{printf("INT_CONSTANT"); return 1; }'
@@ -165,11 +187,12 @@ WS          [ \\r\\n\\t]*
                 'regex': '{D}+"."{D}*({E})?{FS}?',
                 'function': '{printf("REAL_CONSTANT"); return 1; }'
             },
-            # Errors
+            # Newlines
             {
-                'regex': '<*>.|\\n',
-                'function': '{printf("ERROR_UNKNOWN(%s)",yytext); return  999; }'
+                'regex': '\\n',
+                'function': '{printf("\\n"); line++; printf("%3d - ", line); return 499;}'
             },
+            # Errors
             {
                 'regex': '0[xX]{T}+',
                 'function': '{printf("ERROR_HEXADETIMAL(%s)",yytext); return 999; }'
@@ -177,6 +200,26 @@ WS          [ \\r\\n\\t]*
             {
                 'regex': '0[bB]{T}+',
                 'function': '{printf("ERROR_BINARY(%s)",yytext); return 999; }'
+            },
+            # {
+            #     'regex': '{D}+{EE}{FS}?',
+            #     'function': '{printf("ERROR_EXPONENTIAL(%s)",yytext); return 999; }'
+            # },
+            # {
+            #     'regex': '{D}*"."{D}+({EE})?{FS}?',
+            #     'function': '{printf("ERROR_EXPONENTIAL(%s)",yytext); return 999; }'
+            # },
+            # {
+            #     'regex': '{D}+"."{D}*({EE})?{FS}?',
+            #     'function': '{printf("ERROR_EXPONENTIAL(%s)",yytext); return 999; }'
+            # },
+            {
+                'regex': '{D}+[^\\n\\r\\v\\f\\t ,;=/\\]\\)\\}]*',
+                'function': '{printf("ERROR_NUMBER(%s)",yytext); return 999; }'
+            },
+            {
+                'regex': '<*>.|\\n',
+                'function': '{printf("ERROR_UNKNOWN(%s)",yytext); return  999; }'
             },
         ]
         for m in mine:
@@ -186,11 +229,6 @@ WS          [ \\r\\n\\t]*
         """
 int yywrap (void ){
     return 1;
-}
-
-int yyerror(char *str) {
-  printf("ERROR");
-  exit(1);
 }
 
 int main(int argc, char **argv) {
@@ -206,6 +244,7 @@ int main(int argc, char **argv) {
 
     hashtable = ht_create(65536);
 
+    printf("\\n"); printf("%3d - ", line);
     while (yylex() != 0){}
 
     printf("\\n");

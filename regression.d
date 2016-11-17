@@ -1,10 +1,3 @@
-$
-0x1234facd
-0x1234facdu
-0b10101110
-0b10010102
-0b10010101u
-
 import std.stdio;
 import std.algorithm.iteration;
 import std.exception;
@@ -50,5 +43,4 @@ void main()
     ///Parsing tests. Comment to compile
     a = /+ // +/ 1;
     a = /+ "+/" +/ 1";
-    a = /+ /* +/ *2/ 3;
 }

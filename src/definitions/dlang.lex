@@ -6,17 +6,19 @@
 
     int nested_depth = 0;
     int identifiers = 500;
+    line = 1;
 %}
 
 %option caseless
 
 D			[0-9_]
 L			[a-zA-Z_]
-T			[a-zA-Z0-9_]
+T			[a-zA-Z0-9_.]
 A			[a-zA-Z]
 B           [01_]
 H			[a-fA-F0-9_]
 E			[Ee][+-]?{D}+
+EE			[Ee][+-]?{T}+
 FS			(f|F|l|L)
 IS			(u|U|l|L)*
 LP                      "{"
@@ -34,12 +36,12 @@ WS          [ \r\n\t]*
 <MULTILINE_COMMENT>{
   "*/"                            {printf("<MULTILINE_COMMENT>"); BEGIN(INITIAL); return 468; }
   .                               {}
-  \n                              {}
+  \n                              {printf("\n"); line++; printf("%3d - ", line);}
 }
 <DOCUMENTATION_COMMENT>{
   "*/"                            {printf("<DOCUMENTATION_COMMENT>"); BEGIN(INITIAL); return 468; }
   .                               {}
-  \n                              {}
+  \n                              {printf("\n"); line++; printf("%3d - ", line);}
 }
 <NESTED_COMMENT>{
   "/+"                            {nested_depth++;}
@@ -53,14 +55,24 @@ WS          [ \r\n\t]*
                                     };
                                   }
   .                               {}
-  \n                              {}
+  \n                              {printf("\n"); line++; printf("%3d - ", line);}
 }
 <INITIAL>{
   "/**/"                          {printf("<MULTILINE_COMMENT>"); BEGIN(INITIAL); return 468; }
   "/*"                            {BEGIN(MULTILINE_COMMENT);}
   "/+"                            {BEGIN(NESTED_COMMENT);}
   "/++/"                          {printf("<NESTED_COMMENT>"); return 468; }
-  [/]"**"[^*|/]*"*"+([^*/][^*]*"*"+)*[/] {printf("<DOCUMENTATION_COMMENT>"); return 468;}
+  [/]"**"[^*|/]*"*"+([^*/][^*]*"*"+)*[/] {
+                                     printf("<DOCUMENTATION_COMMENT>");
+                                     int j = 0, i=0;
+                                     for (i=0; yytext[i]!='\0'; i++){
+                                         if (yytext[i]=='\n') j++;
+                                     }
+                                     for (i=0; i<j; i++){
+                                        printf("\n"); line++; printf("%3d - ", line);
+                                     }
+                                     return 468;
+                                   }
   "ABSTRACT"                      {printf("ABSTRACT"); return 300;}
   "ALIAS"                         {printf("ALIAS"); return 301;}
   "ALIGN"                         {printf("ALIGN"); return 302;}
@@ -231,12 +243,21 @@ WS          [ \r\n\t]*
   "^"                             {printf("^"); return 467;}
   [ ]                             {printf(" "); return 468;}
   [;]                             {printf(";"); return 469;}
-  [\n]                            {printf("\n"); return 470;}
-  [\r]                            {printf("\r"); return 471;}
-  [ ]                             {printf(" "); return 472;}
-  [\t]                            {printf("\t"); return 473;}
-  [/]                             {printf("/"); return 474;}
-  L?\"(\\.|[^\\"])*\"             {printf("STRING_CONSTANT"); return 1; }
+  [\r]                            {printf("\r"); return 470;}
+  [ ]                             {printf(" "); return 471;}
+  [\t]                            {printf("\t"); return 472;}
+  [/]                             {printf("/"); return 473;}
+  L?\"(\\.|[^\\"])*\"             {
+                                    printf("STRING_CONSTANT");
+                                    int j = 0, i=0;
+                                    for (i=0; yytext[i]!='\0'; i++){
+                                         if (yytext[i]=='\n') j++;
+                                    }
+                                    for (i=0; i<j; i++){
+                                        printf("\n"); line++; printf("%3d - ", line);
+                                     }
+                                    return 1;
+                                  }
   {L}({L}|{D})*                   {
                                     struct item *aux = ht_get(hashtable, yytext);
                                     if (aux == NULL) {
@@ -250,26 +271,23 @@ WS          [ \r\n\t]*
                                     printf("%s(%d)", yytext, aux->code);
                                     return aux->code;
                                   }
-
   {CM}[^\n]*                      {printf("COMMENT"); return 1; }
   0[xX]{H}+                       {printf("HEX_CONSTANT"); return 1; }
   0[bB]{B}+                       {printf("BIN_CONSTANT"); return 1; }
+  0{D}+{IS}?                      {printf("INT_CONSTANT"); return 1; }
   {D}+{IS}?                       {printf("INT_CONSTANT"); return 1; }
   {D}+{E}{FS}?                    {printf("REAL_CONSTANT"); return 1; }
   {D}*"."{D}+({E})?{FS}?          {printf("REAL_CONSTANT"); return 1; }
   {D}+"."{D}*({E})?{FS}?          {printf("REAL_CONSTANT"); return 1; }
-  <*>.|\n                         {printf("ERROR_UNKNOWN(%s)",yytext); return  999; }
+  \n                              {printf("\n"); line++; printf("%3d - ", line); return 499;}
   0[xX]{T}+                       {printf("ERROR_HEXADETIMAL(%s)",yytext); return 999; }
   0[bB]{T}+                       {printf("ERROR_BINARY(%s)",yytext); return 999; }
+  {D}+[^\n\r\v\f\t ,;=/\]\)\}]*   {printf("ERROR_NUMBER(%s)",yytext); return 999; }
+  <*>.|\n                         {printf("ERROR_UNKNOWN(%s)",yytext); return  999; }
 }
 %%
 int yywrap (void ){
     return 1;
-}
-
-int yyerror(char *str) {
-  printf("ERROR");
-  exit(1);
 }
 
 int main(int argc, char **argv) {
@@ -285,6 +303,7 @@ int main(int argc, char **argv) {
 
     hashtable = ht_create(65536);
 
+    printf("\n"); printf("%3d - ", line);
     while (yylex() != 0){}
 
     printf("\n");
