@@ -105,10 +105,12 @@ WS          [ \\r\\n\\t]*
             i += 1
 
         mine = [
+            # Strings
             {
                 'regex': 'L?\\\"(\\\\.|[^\\\\"])*\\\"',
                 'function': '{printf("STRING_CONSTANT"); return 1; }'
             },
+            # Identificadores
             {
                 'regex': '{L}({L}|{D})*',
                 'function': """{
@@ -140,16 +142,12 @@ WS          [ \\r\\n\\t]*
                 'regex': '0[bB]{B}+{IS}?',
                 'function': '{printf("BIN_CONSTANT"); return 1; }'
             },
-            {
-                'regex': '0{D}+{IS}?',
-                'function': '{printf("INT_CONSTANT"); return 1; }'
-            },
+            # {
+            #     'regex': '0{D}+{IS}?',
+            #     'function': '{printf("INT_CONSTANT"); return 1; }'
+            # },
             {
                 'regex': '{D}+{IS}?',
-                'function': '{printf("INT_CONSTANT"); return 1; }'
-            },
-            {
-                'regex': 'L?\'(\\\\.|[^\\\\\'])+\'',
                 'function': '{printf("INT_CONSTANT"); return 1; }'
             },
             # Constantes reales
@@ -165,7 +163,6 @@ WS          [ \\r\\n\\t]*
                 'regex': '{D}+"."{D}*({E})?{FS}?',
                 'function': '{printf("REAL_CONSTANT"); return 1; }'
             },
-            # Comentarios multilínea
         ]
         for m in mine:
             dest.write('  '+m['regex'] + (' ' * (32 - len(m['regex']))) + m['function'] + '\n')
@@ -175,6 +172,11 @@ WS          [ \\r\\n\\t]*
         """
 int yywrap (void ){
     return 1;
+}
+
+int yyerror(char *str) {
+  printf("Error: %s\\n",str);
+  exit(1);
 }
 
 int main(int argc, char **argv) {

@@ -252,9 +252,7 @@ WS          [ \r\n\t]*
   {CM}[^\n]*                      {printf("COMMENT"); return 1; }
   0[xX]{H}+{IS}?                  {printf("HEX_CONSTANT"); return 1; }
   0[bB]{B}+{IS}?                  {printf("BIN_CONSTANT"); return 1; }
-  0{D}+{IS}?                      {printf("INT_CONSTANT"); return 1; }
   {D}+{IS}?                       {printf("INT_CONSTANT"); return 1; }
-  L?'(\\.|[^\\'])+'               {printf("INT_CONSTANT"); return 1; }
   {D}+{E}{FS}?                    {printf("REAL_CONSTANT"); return 1; }
   {D}*"."{D}+({E})?{FS}?          {printf("REAL_CONSTANT"); return 1; }
   {D}+"."{D}*({E})?{FS}?          {printf("REAL_CONSTANT"); return 1; }
@@ -262,6 +260,11 @@ WS          [ \r\n\t]*
 %%
 int yywrap (void ){
     return 1;
+}
+
+int yyerror(char *str) {
+  printf("Error: %s\n",str);
+  exit(1);
 }
 
 int main(int argc, char **argv) {
