@@ -12,8 +12,10 @@
 
 D			[0-9_]
 L			[a-zA-Z_]
-B           [01]
-H			[a-fA-F0-9]
+T			[a-zA-Z0-9_]
+A			[a-zA-Z]
+B           [01_]
+H			[a-fA-F0-9_]
 E			[Ee][+-]?{D}+
 FS			(f|F|l|L)
 IS			(u|U|l|L)*
@@ -250,12 +252,15 @@ WS          [ \r\n\t]*
                                   }
 
   {CM}[^\n]*                      {printf("COMMENT"); return 1; }
-  0[xX]{H}+{IS}?                  {printf("HEX_CONSTANT"); return 1; }
-  0[bB]{B}+{IS}?                  {printf("BIN_CONSTANT"); return 1; }
+  0[xX]{H}+                       {printf("HEX_CONSTANT"); return 1; }
+  0[bB]{B}+                       {printf("BIN_CONSTANT"); return 1; }
   {D}+{IS}?                       {printf("INT_CONSTANT"); return 1; }
   {D}+{E}{FS}?                    {printf("REAL_CONSTANT"); return 1; }
   {D}*"."{D}+({E})?{FS}?          {printf("REAL_CONSTANT"); return 1; }
   {D}+"."{D}*({E})?{FS}?          {printf("REAL_CONSTANT"); return 1; }
+  <*>.|\n                         {printf("ERROR_UNKNOWN(%s)",yytext); return  999; }
+  0[xX]{T}+                       {printf("ERROR_HEXADETIMAL(%s)",yytext); return 999; }
+  0[bB]{T}+                       {printf("ERROR_BINARY(%s)",yytext); return 999; }
 }
 %%
 int yywrap (void ){

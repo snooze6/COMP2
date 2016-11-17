@@ -11,7 +11,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/lexycal_analyzer/lexycal_analyzer.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/lexycal_analyzer/lexycal_analyzer.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/definitions/definitions.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/definitions/lex.yy.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/input_system/input_system.c" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/input_system/input_system.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/config.h" isTestSource="false" />

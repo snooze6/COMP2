@@ -25,8 +25,10 @@ if __name__ == "__main__":
 
 D			[0-9_]
 L			[a-zA-Z_]
-B           [01]
-H			[a-fA-F0-9]
+T			[a-zA-Z0-9_]
+A			[a-zA-Z]
+B           [01_]
+H			[a-fA-F0-9_]
 E			[Ee][+-]?{D}+
 FS			(f|F|l|L)
 IS			(u|U|l|L)*
@@ -135,11 +137,11 @@ WS          [ \\r\\n\\t]*
             },
             # Constantes enteras
             {
-                'regex': '0[xX]{H}+{IS}?',
+                'regex': '0[xX]{H}+',
                 'function': '{printf("HEX_CONSTANT"); return 1; }'
             },
             {
-                'regex': '0[bB]{B}+{IS}?',
+                'regex': '0[bB]{B}+',
                 'function': '{printf("BIN_CONSTANT"); return 1; }'
             },
             # {
@@ -163,10 +165,22 @@ WS          [ \\r\\n\\t]*
                 'regex': '{D}+"."{D}*({E})?{FS}?',
                 'function': '{printf("REAL_CONSTANT"); return 1; }'
             },
+            # Errors
+            {
+                'regex': '<*>.|\\n',
+                'function': '{printf("ERROR_UNKNOWN(%s)",yytext); return  999; }'
+            },
+            {
+                'regex': '0[xX]{T}+',
+                'function': '{printf("ERROR_HEXADETIMAL(%s)",yytext); return 999; }'
+            },
+            {
+                'regex': '0[bB]{T}+',
+                'function': '{printf("ERROR_BINARY(%s)",yytext); return 999; }'
+            },
         ]
         for m in mine:
             dest.write('  '+m['regex'] + (' ' * (32 - len(m['regex']))) + m['function'] + '\n')
-
     dest.write('}\n%%')
     dest.write(
         """
