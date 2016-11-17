@@ -2,11 +2,11 @@
 
 Lo mismo que la práctica 1 pero usando FLEX
 
-flex example3.lex
-gcc lex.yy.c -lfl -o myLexer
-myLexer.exe
+para lanzarlo puede hacerse
 
-flex dlang.lex && gcc lex.yy.c -lfl -o dlangLexer
+```bash
+python gen_reserved.py
+```
 
 ## Práctica 1
 
