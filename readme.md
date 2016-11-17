@@ -5,7 +5,7 @@ Lo mismo que la práctica 1 pero usando FLEX
 para lanzarlo puede hacerse
 
 ```bash
-python gen_reserved.py
+python gen_lex.py
 ```
 
 ## Práctica 1
