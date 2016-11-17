@@ -263,7 +263,7 @@ int yywrap (void ){
 }
 
 int yyerror(char *str) {
-  printf("Error: %s\n",str);
+  printf("ERROR");
   exit(1);
 }
 
@@ -272,10 +272,10 @@ int main(int argc, char **argv) {
 
     if ( argc > 1 ) {
             yyin = fopen( argv[1], "r" );
-            printf(COLOR_MAGENTA"Argumento\n"COLOR_RESET);
+            //printf(COLOR_MAGENTA"Argumento\n"COLOR_RESET);
     } else {
             yyin = stdin;
-            printf(COLOR_MAGENTA"Stdin\n"COLOR_RESET);
+            //printf(COLOR_MAGENTA"Stdin\n"COLOR_RESET);
     }
 
     hashtable = ht_create(65536);

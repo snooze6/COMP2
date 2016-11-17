@@ -5,6 +5,7 @@ Lo mismo que la práctica 1 pero usando FLEX
 para lanzarlo puede hacerse
 
 ```bash
+cd src/definitions
 python gen_lex.py
 ```
 
