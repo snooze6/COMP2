@@ -202,4 +202,4 @@ int main(int argc, char **argv) {
     )
     dest.close()
 
-    os.system("flex dlang.lex && gcc lex.yy.c ../external/model/hash.c ../external/model/list.c -lfl -o dlangLexer && cat ../../regression.d | dlangLexer")
+    os.system("flex dlang.lex && gcc lex.yy.c ../external/model/hash.c ../external/model/list.c -lfl -o dlangLexer && dlangLexer ../../regression.d")
