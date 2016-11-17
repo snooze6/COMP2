@@ -38,7 +38,7 @@ void main()
     y_bar = sum(y)/(cast(double)y.length);
     b1 = beta1(x, y, x_bar, y_bar);
     _0 = y_bar - (b1*x_bar);
-	
+
     /**/ /* Print result */ /**/
     writefln("\"Slope\": %f", b1);
     writefln("\"Intercept\": %f", _0);
@@ -46,5 +46,5 @@ void main()
 
 
     a = /+ // +/ 1;
-    a = /+ " +/ 
+    a = /+ " +/
 }

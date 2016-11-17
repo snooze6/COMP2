@@ -5,12 +5,14 @@
     #include "../config.h"
 
     int nested_depth = 0;
+    int identifiers = 500;
 %}
 
 %option caseless
 
-D			[0-9]
+D			[0-9_]
 L			[a-zA-Z_]
+B           [01]
 H			[a-fA-F0-9]
 E			[Ee][+-]?{D}+
 FS			(f|F|l|L)
@@ -233,9 +235,23 @@ WS          [ \r\n\t]*
   [\t]                            {printf("\t"); return 473;}
   [/]                             {printf("/"); return 474;}
   L?\"(\\.|[^\\"])*\"             {printf("STRING_CONSTANT"); return 1; }
-  {L}({L}|{D})*                   {printf("%s", yytext); return 1; }
+  {L}({L}|{D})*                   {
+                                    struct item *aux = ht_get(hashtable, yytext);
+                                    if (aux == NULL) {
+                                        aux = malloc(sizeof(struct item));
+                                        aux->code = identifiers;
+                                        identifiers++;
+                                        aux->instance = yytext;
+                                        ht_set(hashtable, yytext, aux);
+                                        aux = ht_get(hashtable, yytext);;
+                                    }
+                                    printf("%s(%d)", yytext, aux->code);
+                                    return aux->code;
+                                  }
+
   {CM}[^\n]*                      {printf("COMMENT"); return 1; }
-  0[xX]{H}+{IS}?                  {printf("INT_CONSTANT"); return 1; }
+  0[xX]{H}+{IS}?                  {printf("HEX_CONSTANT"); return 1; }
+  0[bB]{B}+{IS}?                  {printf("BIN_CONSTANT"); return 1; }
   0{D}+{IS}?                      {printf("INT_CONSTANT"); return 1; }
   {D}+{IS}?                       {printf("INT_CONSTANT"); return 1; }
   L?'(\\.|[^\\'])+'               {printf("INT_CONSTANT"); return 1; }
@@ -244,6 +260,9 @@ WS          [ \r\n\t]*
   {D}+"."{D}*({E})?{FS}?          {printf("REAL_CONSTANT"); return 1; }
 }
 %%
+int yywrap (void ){
+    return 1;
+}
 
 int main(int argc, char **argv) {
     printf(COLOR_MAGENTA"D Lexical_Analyzer v0.1\n"COLOR_RESET);
@@ -256,7 +275,14 @@ int main(int argc, char **argv) {
             printf(COLOR_MAGENTA"Stdin\n"COLOR_RESET);
     }
 
+    hashtable = ht_create(65536);
+
     while (yylex() != 0){}
+
+    printf("\n");
+    ht_print_identifiers(hashtable);
+
+    ht_free(hashtable);
 
     return EXIT_SUCCESS;
 }

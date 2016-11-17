@@ -1,6 +1,5 @@
 #include "hash.h"
 #include "../../config.h"
-#include "../../lexycal_analyzer/lexycal_analyzer.h"
 
 // Create new hash table
 hashtable_t *ht_create( int size ) {
@@ -146,11 +145,12 @@ void ht_print(hashtable_t *hashtable){
     printf(COLOR_MAGENTA"< HASH TABLE CONTENT >\n");
 
     ol_node *p; p = hashtable->keys;
-
+    int count = 0;
     while(p) {
         struct item *i = ht_get(hashtable,p->data);
         printf("  "VTAG" %s - %d\n", i->instance, i->code);
         p = p->ptr;
+        count++;
     }
     printf("  "VTAG" Number of Identifiers: %d\n", count);
     printf("</HASH TABLE CONTENT >\n"COLOR_RESET);
@@ -161,13 +161,17 @@ void ht_print_identifiers(hashtable_t *hashtable){
 
     ol_node *p; p = hashtable->keys;
 
+    int count = 0;
     while(p) {
         struct item *i = ht_get(hashtable,p->data);
         if (i->code>=500) {
             printf("  "VTAG" %s - %d\n", i->instance, i->code);
+            count++;
         }
         p = p->ptr;
     }
+    printf("  "VTAG" Number of Identifiers: %d\n", count);
+
     printf("</HASH TABLE IDENTIFIERS >\n"COLOR_RESET);
 }
 
