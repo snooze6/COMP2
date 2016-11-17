@@ -13,7 +13,6 @@ if __name__ == "__main__":
     dest.write(
         """%{
     #include <stdio.h>
-    #include "definitions.h"
     #include "../external/model/hash.h"
     #include "../config.h"
 

@@ -1,6 +1,5 @@
 %{
     #include <stdio.h>
-    #include "definitions.h"
     #include "../external/model/hash.h"
     #include "../config.h"
 

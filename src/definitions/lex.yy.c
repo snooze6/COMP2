@@ -1257,7 +1257,6 @@ char *yytext;
 #line 1 "dlang.lex"
 #line 2 "dlang.lex"
     #include <stdio.h>
-    #include "definitions.h"
     #include "../external/model/hash.h"
     #include "../config.h"
 
@@ -1267,7 +1266,7 @@ char *yytext;
 
 
 
-#line 1271 "lex.yy.c"
+#line 1270 "lex.yy.c"
 
 #define INITIAL 0
 #define MULTILINE_COMMENT 1
@@ -1488,10 +1487,10 @@ YY_DECL
 		}
 
 	{
-#line 34 "dlang.lex"
+#line 33 "dlang.lex"
 
 
-#line 1495 "lex.yy.c"
+#line 1494 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1550,48 +1549,48 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 37 "dlang.lex"
+#line 36 "dlang.lex"
 {printf("<MULTILINE_COMMENT>"); BEGIN(INITIAL); return 468; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 38 "dlang.lex"
+#line 37 "dlang.lex"
 {}
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 39 "dlang.lex"
+#line 38 "dlang.lex"
 {printf("\n"); line++; printf("%3d - ", line);}
 	YY_BREAK
 
 
 case 4:
 YY_RULE_SETUP
-#line 42 "dlang.lex"
+#line 41 "dlang.lex"
 {printf("<DOCUMENTATION_COMMENT>"); BEGIN(INITIAL); return 468; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 43 "dlang.lex"
+#line 42 "dlang.lex"
 {}
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 44 "dlang.lex"
+#line 43 "dlang.lex"
 {printf("\n"); line++; printf("%3d - ", line);}
 	YY_BREAK
 
 
 case 7:
 YY_RULE_SETUP
-#line 47 "dlang.lex"
+#line 46 "dlang.lex"
 {nested_depth++;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 48 "dlang.lex"
+#line 47 "dlang.lex"
 {
                                     if (nested_depth==0) {
                                       printf("<NESTED_COMMENT>");
@@ -1604,41 +1603,41 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 57 "dlang.lex"
+#line 56 "dlang.lex"
 {}
 	YY_BREAK
 case 10:
 /* rule 10 can match eol */
 YY_RULE_SETUP
-#line 58 "dlang.lex"
+#line 57 "dlang.lex"
 {printf("\n"); line++; printf("%3d - ", line);}
 	YY_BREAK
 
 
 case 11:
 YY_RULE_SETUP
-#line 61 "dlang.lex"
+#line 60 "dlang.lex"
 {printf("<MULTILINE_COMMENT>"); BEGIN(INITIAL); return 468; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 62 "dlang.lex"
+#line 61 "dlang.lex"
 {BEGIN(MULTILINE_COMMENT);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 63 "dlang.lex"
+#line 62 "dlang.lex"
 {BEGIN(NESTED_COMMENT);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 64 "dlang.lex"
+#line 63 "dlang.lex"
 {printf("<NESTED_COMMENT>"); return 468; }
 	YY_BREAK
 case 15:
 /* rule 15 can match eol */
 YY_RULE_SETUP
-#line 65 "dlang.lex"
+#line 64 "dlang.lex"
 {
                                      printf("<DOCUMENTATION_COMMENT>");
                                      int j = 0, i=0;
@@ -1653,878 +1652,878 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 76 "dlang.lex"
+#line 75 "dlang.lex"
 {printf("ABSTRACT"); return 300;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 77 "dlang.lex"
+#line 76 "dlang.lex"
 {printf("ALIAS"); return 301;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 78 "dlang.lex"
+#line 77 "dlang.lex"
 {printf("ALIGN"); return 302;}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 79 "dlang.lex"
+#line 78 "dlang.lex"
 {printf("ASM"); return 303;}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 80 "dlang.lex"
+#line 79 "dlang.lex"
 {printf("ASSERT"); return 304;}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 81 "dlang.lex"
+#line 80 "dlang.lex"
 {printf("AUTO"); return 305;}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 82 "dlang.lex"
+#line 81 "dlang.lex"
 {printf("BODY"); return 306;}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 83 "dlang.lex"
+#line 82 "dlang.lex"
 {printf("BOOL"); return 307;}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 84 "dlang.lex"
+#line 83 "dlang.lex"
 {printf("BREAK"); return 308;}
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 85 "dlang.lex"
+#line 84 "dlang.lex"
 {printf("BYTE"); return 309;}
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 86 "dlang.lex"
+#line 85 "dlang.lex"
 {printf("CASE"); return 310;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 87 "dlang.lex"
+#line 86 "dlang.lex"
 {printf("CAST"); return 311;}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 88 "dlang.lex"
+#line 87 "dlang.lex"
 {printf("CATCH"); return 312;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 89 "dlang.lex"
+#line 88 "dlang.lex"
 {printf("CDOUBLE"); return 313;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 90 "dlang.lex"
+#line 89 "dlang.lex"
 {printf("CENT"); return 314;}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 91 "dlang.lex"
+#line 90 "dlang.lex"
 {printf("CFLOAT"); return 315;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 92 "dlang.lex"
+#line 91 "dlang.lex"
 {printf("CHAR"); return 316;}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 93 "dlang.lex"
+#line 92 "dlang.lex"
 {printf("CLASS"); return 317;}
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 94 "dlang.lex"
+#line 93 "dlang.lex"
 {printf("CONST"); return 318;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 95 "dlang.lex"
+#line 94 "dlang.lex"
 {printf("CONTINUE"); return 319;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 96 "dlang.lex"
+#line 95 "dlang.lex"
 {printf("CREAL"); return 320;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 97 "dlang.lex"
+#line 96 "dlang.lex"
 {printf("DCHAR"); return 321;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 98 "dlang.lex"
+#line 97 "dlang.lex"
 {printf("DEBUG"); return 322;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 99 "dlang.lex"
+#line 98 "dlang.lex"
 {printf("DEFAULT"); return 323;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 100 "dlang.lex"
+#line 99 "dlang.lex"
 {printf("DELEGATE"); return 324;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 101 "dlang.lex"
+#line 100 "dlang.lex"
 {printf("DELETE"); return 325;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 102 "dlang.lex"
+#line 101 "dlang.lex"
 {printf("DEPRECATED"); return 326;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 103 "dlang.lex"
+#line 102 "dlang.lex"
 {printf("DO"); return 327;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 104 "dlang.lex"
+#line 103 "dlang.lex"
 {printf("DOUBLE"); return 328;}
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 105 "dlang.lex"
+#line 104 "dlang.lex"
 {printf("ELSE"); return 329;}
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 106 "dlang.lex"
+#line 105 "dlang.lex"
 {printf("ENUM"); return 330;}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 107 "dlang.lex"
+#line 106 "dlang.lex"
 {printf("EXPORT"); return 331;}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 108 "dlang.lex"
+#line 107 "dlang.lex"
 {printf("EXTERN"); return 332;}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 109 "dlang.lex"
+#line 108 "dlang.lex"
 {printf("FALSE"); return 333;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 110 "dlang.lex"
+#line 109 "dlang.lex"
 {printf("FINAL"); return 334;}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 111 "dlang.lex"
+#line 110 "dlang.lex"
 {printf("FINALLY"); return 335;}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 112 "dlang.lex"
+#line 111 "dlang.lex"
 {printf("FLOAT"); return 336;}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 113 "dlang.lex"
+#line 112 "dlang.lex"
 {printf("FOR"); return 337;}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 114 "dlang.lex"
+#line 113 "dlang.lex"
 {printf("FOREACH"); return 338;}
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 115 "dlang.lex"
+#line 114 "dlang.lex"
 {printf("FOREACH_REVERSE"); return 339;}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 116 "dlang.lex"
+#line 115 "dlang.lex"
 {printf("FUNCTION"); return 340;}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 117 "dlang.lex"
+#line 116 "dlang.lex"
 {printf("GOTO"); return 341;}
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 118 "dlang.lex"
+#line 117 "dlang.lex"
 {printf("IDOUBLE"); return 342;}
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 119 "dlang.lex"
+#line 118 "dlang.lex"
 {printf("IF"); return 343;}
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 120 "dlang.lex"
+#line 119 "dlang.lex"
 {printf("IFLOAT"); return 344;}
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 121 "dlang.lex"
+#line 120 "dlang.lex"
 {printf("IMMUTABLE"); return 345;}
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 122 "dlang.lex"
+#line 121 "dlang.lex"
 {printf("IMPORT"); return 346;}
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 123 "dlang.lex"
+#line 122 "dlang.lex"
 {printf("IN"); return 347;}
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 124 "dlang.lex"
+#line 123 "dlang.lex"
 {printf("INOUT"); return 348;}
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 125 "dlang.lex"
+#line 124 "dlang.lex"
 {printf("INT"); return 349;}
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 126 "dlang.lex"
+#line 125 "dlang.lex"
 {printf("INTERFACE"); return 350;}
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 127 "dlang.lex"
+#line 126 "dlang.lex"
 {printf("INVARIANT"); return 351;}
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 128 "dlang.lex"
+#line 127 "dlang.lex"
 {printf("IREAL"); return 352;}
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 129 "dlang.lex"
+#line 128 "dlang.lex"
 {printf("IS"); return 353;}
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 130 "dlang.lex"
+#line 129 "dlang.lex"
 {printf("LAZY"); return 354;}
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 131 "dlang.lex"
+#line 130 "dlang.lex"
 {printf("LONG"); return 355;}
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 132 "dlang.lex"
+#line 131 "dlang.lex"
 {printf("MACRO"); return 356;}
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 133 "dlang.lex"
+#line 132 "dlang.lex"
 {printf("MIXIN"); return 357;}
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 134 "dlang.lex"
+#line 133 "dlang.lex"
 {printf("MODULE"); return 358;}
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 135 "dlang.lex"
+#line 134 "dlang.lex"
 {printf("NEW"); return 359;}
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 136 "dlang.lex"
+#line 135 "dlang.lex"
 {printf("NOTHROW"); return 360;}
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 137 "dlang.lex"
+#line 136 "dlang.lex"
 {printf("NULL"); return 361;}
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 138 "dlang.lex"
+#line 137 "dlang.lex"
 {printf("OUT"); return 362;}
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 139 "dlang.lex"
+#line 138 "dlang.lex"
 {printf("OVERRIDE"); return 363;}
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 140 "dlang.lex"
+#line 139 "dlang.lex"
 {printf("PACKAGE"); return 364;}
 	YY_BREAK
 case 81:
 YY_RULE_SETUP
-#line 141 "dlang.lex"
+#line 140 "dlang.lex"
 {printf("PRAGMA"); return 365;}
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 142 "dlang.lex"
+#line 141 "dlang.lex"
 {printf("PRIVATE"); return 366;}
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 143 "dlang.lex"
+#line 142 "dlang.lex"
 {printf("PROTECTED"); return 367;}
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 144 "dlang.lex"
+#line 143 "dlang.lex"
 {printf("PUBLIC"); return 368;}
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 145 "dlang.lex"
+#line 144 "dlang.lex"
 {printf("PURE"); return 369;}
 	YY_BREAK
 case 86:
 YY_RULE_SETUP
-#line 146 "dlang.lex"
+#line 145 "dlang.lex"
 {printf("REAL"); return 370;}
 	YY_BREAK
 case 87:
 YY_RULE_SETUP
-#line 147 "dlang.lex"
+#line 146 "dlang.lex"
 {printf("REF"); return 371;}
 	YY_BREAK
 case 88:
 YY_RULE_SETUP
-#line 148 "dlang.lex"
+#line 147 "dlang.lex"
 {printf("RETURN"); return 372;}
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
-#line 149 "dlang.lex"
+#line 148 "dlang.lex"
 {printf("SCOPE"); return 373;}
 	YY_BREAK
 case 90:
 YY_RULE_SETUP
-#line 150 "dlang.lex"
+#line 149 "dlang.lex"
 {printf("SHARED"); return 374;}
 	YY_BREAK
 case 91:
 YY_RULE_SETUP
-#line 151 "dlang.lex"
+#line 150 "dlang.lex"
 {printf("SHORT"); return 375;}
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 152 "dlang.lex"
+#line 151 "dlang.lex"
 {printf("STATIC"); return 376;}
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 153 "dlang.lex"
+#line 152 "dlang.lex"
 {printf("STRUCT"); return 377;}
 	YY_BREAK
 case 94:
 YY_RULE_SETUP
-#line 154 "dlang.lex"
+#line 153 "dlang.lex"
 {printf("SUPER"); return 378;}
 	YY_BREAK
 case 95:
 YY_RULE_SETUP
-#line 155 "dlang.lex"
+#line 154 "dlang.lex"
 {printf("SWITCH"); return 379;}
 	YY_BREAK
 case 96:
 YY_RULE_SETUP
-#line 156 "dlang.lex"
+#line 155 "dlang.lex"
 {printf("SYNCHRONIZED"); return 380;}
 	YY_BREAK
 case 97:
 YY_RULE_SETUP
-#line 157 "dlang.lex"
+#line 156 "dlang.lex"
 {printf("TEMPLATE"); return 381;}
 	YY_BREAK
 case 98:
 YY_RULE_SETUP
-#line 158 "dlang.lex"
+#line 157 "dlang.lex"
 {printf("THIS"); return 382;}
 	YY_BREAK
 case 99:
 YY_RULE_SETUP
-#line 159 "dlang.lex"
+#line 158 "dlang.lex"
 {printf("THROW"); return 383;}
 	YY_BREAK
 case 100:
 YY_RULE_SETUP
-#line 160 "dlang.lex"
+#line 159 "dlang.lex"
 {printf("TRUE"); return 384;}
 	YY_BREAK
 case 101:
 YY_RULE_SETUP
-#line 161 "dlang.lex"
+#line 160 "dlang.lex"
 {printf("TRY"); return 385;}
 	YY_BREAK
 case 102:
 YY_RULE_SETUP
-#line 162 "dlang.lex"
+#line 161 "dlang.lex"
 {printf("TYPEDEF"); return 386;}
 	YY_BREAK
 case 103:
 YY_RULE_SETUP
-#line 163 "dlang.lex"
+#line 162 "dlang.lex"
 {printf("TYPEID"); return 387;}
 	YY_BREAK
 case 104:
 YY_RULE_SETUP
-#line 164 "dlang.lex"
+#line 163 "dlang.lex"
 {printf("TYPEOF"); return 388;}
 	YY_BREAK
 case 105:
 YY_RULE_SETUP
-#line 165 "dlang.lex"
+#line 164 "dlang.lex"
 {printf("UBYTE"); return 389;}
 	YY_BREAK
 case 106:
 YY_RULE_SETUP
-#line 166 "dlang.lex"
+#line 165 "dlang.lex"
 {printf("UCENT"); return 390;}
 	YY_BREAK
 case 107:
 YY_RULE_SETUP
-#line 167 "dlang.lex"
+#line 166 "dlang.lex"
 {printf("UINT"); return 391;}
 	YY_BREAK
 case 108:
 YY_RULE_SETUP
-#line 168 "dlang.lex"
+#line 167 "dlang.lex"
 {printf("ULONG"); return 392;}
 	YY_BREAK
 case 109:
 YY_RULE_SETUP
-#line 169 "dlang.lex"
+#line 168 "dlang.lex"
 {printf("UNION"); return 393;}
 	YY_BREAK
 case 110:
 YY_RULE_SETUP
-#line 170 "dlang.lex"
+#line 169 "dlang.lex"
 {printf("UNITTEST"); return 394;}
 	YY_BREAK
 case 111:
 YY_RULE_SETUP
-#line 171 "dlang.lex"
+#line 170 "dlang.lex"
 {printf("USHORT"); return 395;}
 	YY_BREAK
 case 112:
 YY_RULE_SETUP
-#line 172 "dlang.lex"
+#line 171 "dlang.lex"
 {printf("VERSION"); return 396;}
 	YY_BREAK
 case 113:
 YY_RULE_SETUP
-#line 173 "dlang.lex"
+#line 172 "dlang.lex"
 {printf("VOID"); return 397;}
 	YY_BREAK
 case 114:
 YY_RULE_SETUP
-#line 174 "dlang.lex"
+#line 173 "dlang.lex"
 {printf("VOLATILE"); return 398;}
 	YY_BREAK
 case 115:
 YY_RULE_SETUP
-#line 175 "dlang.lex"
+#line 174 "dlang.lex"
 {printf("WCHAR"); return 399;}
 	YY_BREAK
 case 116:
 YY_RULE_SETUP
-#line 176 "dlang.lex"
+#line 175 "dlang.lex"
 {printf("WHILE"); return 400;}
 	YY_BREAK
 case 117:
 YY_RULE_SETUP
-#line 177 "dlang.lex"
+#line 176 "dlang.lex"
 {printf("WITH"); return 401;}
 	YY_BREAK
 case 118:
 YY_RULE_SETUP
-#line 178 "dlang.lex"
+#line 177 "dlang.lex"
 {printf("__FILE__"); return 402;}
 	YY_BREAK
 case 119:
 YY_RULE_SETUP
-#line 179 "dlang.lex"
+#line 178 "dlang.lex"
 {printf("__FILE_FULL_PATH__"); return 403;}
 	YY_BREAK
 case 120:
 YY_RULE_SETUP
-#line 180 "dlang.lex"
+#line 179 "dlang.lex"
 {printf("__MODULE__"); return 404;}
 	YY_BREAK
 case 121:
 YY_RULE_SETUP
-#line 181 "dlang.lex"
+#line 180 "dlang.lex"
 {printf("__LINE__"); return 405;}
 	YY_BREAK
 case 122:
 YY_RULE_SETUP
-#line 182 "dlang.lex"
+#line 181 "dlang.lex"
 {printf("__FUNCTION__"); return 406;}
 	YY_BREAK
 case 123:
 YY_RULE_SETUP
-#line 183 "dlang.lex"
+#line 182 "dlang.lex"
 {printf("__PRETTY_FUNCTION__"); return 407;}
 	YY_BREAK
 case 124:
 YY_RULE_SETUP
-#line 184 "dlang.lex"
+#line 183 "dlang.lex"
 {printf("__GSHARED"); return 408;}
 	YY_BREAK
 case 125:
 YY_RULE_SETUP
-#line 185 "dlang.lex"
+#line 184 "dlang.lex"
 {printf("__TRAITS"); return 409;}
 	YY_BREAK
 case 126:
 YY_RULE_SETUP
-#line 186 "dlang.lex"
+#line 185 "dlang.lex"
 {printf("__VECTOR"); return 410;}
 	YY_BREAK
 case 127:
 YY_RULE_SETUP
-#line 187 "dlang.lex"
+#line 186 "dlang.lex"
 {printf("__PARAMETERS"); return 411;}
 	YY_BREAK
 case 128:
 YY_RULE_SETUP
-#line 188 "dlang.lex"
+#line 187 "dlang.lex"
 {printf("/="); return 412;}
 	YY_BREAK
 case 129:
 YY_RULE_SETUP
-#line 189 "dlang.lex"
+#line 188 "dlang.lex"
 {printf(".."); return 413;}
 	YY_BREAK
 case 130:
 YY_RULE_SETUP
-#line 190 "dlang.lex"
+#line 189 "dlang.lex"
 {printf("&="); return 414;}
 	YY_BREAK
 case 131:
 YY_RULE_SETUP
-#line 191 "dlang.lex"
+#line 190 "dlang.lex"
 {printf("&&"); return 415;}
 	YY_BREAK
 case 132:
 YY_RULE_SETUP
-#line 192 "dlang.lex"
+#line 191 "dlang.lex"
 {printf("|="); return 416;}
 	YY_BREAK
 case 133:
 YY_RULE_SETUP
-#line 193 "dlang.lex"
+#line 192 "dlang.lex"
 {printf("||"); return 417;}
 	YY_BREAK
 case 134:
 YY_RULE_SETUP
-#line 194 "dlang.lex"
+#line 193 "dlang.lex"
 {printf("-="); return 418;}
 	YY_BREAK
 case 135:
 YY_RULE_SETUP
-#line 195 "dlang.lex"
+#line 194 "dlang.lex"
 {printf("--"); return 419;}
 	YY_BREAK
 case 136:
 YY_RULE_SETUP
-#line 196 "dlang.lex"
+#line 195 "dlang.lex"
 {printf("+="); return 420;}
 	YY_BREAK
 case 137:
 YY_RULE_SETUP
-#line 197 "dlang.lex"
+#line 196 "dlang.lex"
 {printf("++"); return 421;}
 	YY_BREAK
 case 138:
 YY_RULE_SETUP
-#line 198 "dlang.lex"
+#line 197 "dlang.lex"
 {printf("<="); return 422;}
 	YY_BREAK
 case 139:
 YY_RULE_SETUP
-#line 199 "dlang.lex"
+#line 198 "dlang.lex"
 {printf("<<"); return 423;}
 	YY_BREAK
 case 140:
 YY_RULE_SETUP
-#line 200 "dlang.lex"
+#line 199 "dlang.lex"
 {printf("<>"); return 424;}
 	YY_BREAK
 case 141:
 YY_RULE_SETUP
-#line 201 "dlang.lex"
+#line 200 "dlang.lex"
 {printf(">="); return 425;}
 	YY_BREAK
 case 142:
 YY_RULE_SETUP
-#line 202 "dlang.lex"
+#line 201 "dlang.lex"
 {printf(">>"); return 426;}
 	YY_BREAK
 case 143:
 YY_RULE_SETUP
-#line 203 "dlang.lex"
+#line 202 "dlang.lex"
 {printf("!="); return 427;}
 	YY_BREAK
 case 144:
 YY_RULE_SETUP
-#line 204 "dlang.lex"
+#line 203 "dlang.lex"
 {printf("!<"); return 428;}
 	YY_BREAK
 case 145:
 YY_RULE_SETUP
-#line 205 "dlang.lex"
+#line 204 "dlang.lex"
 {printf("!>"); return 429;}
 	YY_BREAK
 case 146:
 YY_RULE_SETUP
-#line 206 "dlang.lex"
+#line 205 "dlang.lex"
 {printf("=="); return 430;}
 	YY_BREAK
 case 147:
 YY_RULE_SETUP
-#line 207 "dlang.lex"
+#line 206 "dlang.lex"
 {printf("*="); return 431;}
 	YY_BREAK
 case 148:
 YY_RULE_SETUP
-#line 208 "dlang.lex"
+#line 207 "dlang.lex"
 {printf("%="); return 432;}
 	YY_BREAK
 case 149:
 YY_RULE_SETUP
-#line 209 "dlang.lex"
+#line 208 "dlang.lex"
 {printf("^="); return 433;}
 	YY_BREAK
 case 150:
 YY_RULE_SETUP
-#line 210 "dlang.lex"
+#line 209 "dlang.lex"
 {printf("^^"); return 434;}
 	YY_BREAK
 case 151:
 YY_RULE_SETUP
-#line 211 "dlang.lex"
+#line 210 "dlang.lex"
 {printf("~="); return 435;}
 	YY_BREAK
 case 152:
 YY_RULE_SETUP
-#line 212 "dlang.lex"
+#line 211 "dlang.lex"
 {printf("=>"); return 436;}
 	YY_BREAK
 case 153:
 YY_RULE_SETUP
-#line 213 "dlang.lex"
+#line 212 "dlang.lex"
 {printf("<<="); return 437;}
 	YY_BREAK
 case 154:
 YY_RULE_SETUP
-#line 214 "dlang.lex"
+#line 213 "dlang.lex"
 {printf("..."); return 438;}
 	YY_BREAK
 case 155:
 YY_RULE_SETUP
-#line 215 "dlang.lex"
+#line 214 "dlang.lex"
 {printf("<>="); return 439;}
 	YY_BREAK
 case 156:
 YY_RULE_SETUP
-#line 216 "dlang.lex"
+#line 215 "dlang.lex"
 {printf(">>="); return 440;}
 	YY_BREAK
 case 157:
 YY_RULE_SETUP
-#line 217 "dlang.lex"
+#line 216 "dlang.lex"
 {printf(">>>"); return 441;}
 	YY_BREAK
 case 158:
 YY_RULE_SETUP
-#line 218 "dlang.lex"
+#line 217 "dlang.lex"
 {printf("!<>"); return 442;}
 	YY_BREAK
 case 159:
 YY_RULE_SETUP
-#line 219 "dlang.lex"
+#line 218 "dlang.lex"
 {printf("!<="); return 443;}
 	YY_BREAK
 case 160:
 YY_RULE_SETUP
-#line 220 "dlang.lex"
+#line 219 "dlang.lex"
 {printf("!>="); return 444;}
 	YY_BREAK
 case 161:
 YY_RULE_SETUP
-#line 221 "dlang.lex"
+#line 220 "dlang.lex"
 {printf("^^="); return 445;}
 	YY_BREAK
 case 162:
 YY_RULE_SETUP
-#line 222 "dlang.lex"
+#line 221 "dlang.lex"
 {printf(">>>="); return 446;}
 	YY_BREAK
 case 163:
 YY_RULE_SETUP
-#line 223 "dlang.lex"
+#line 222 "dlang.lex"
 {printf("!<>="); return 447;}
 	YY_BREAK
 case 164:
 YY_RULE_SETUP
-#line 224 "dlang.lex"
+#line 223 "dlang.lex"
 {printf("."); return 448;}
 	YY_BREAK
 case 165:
 YY_RULE_SETUP
-#line 225 "dlang.lex"
+#line 224 "dlang.lex"
 {printf(","); return 449;}
 	YY_BREAK
 case 166:
 YY_RULE_SETUP
-#line 226 "dlang.lex"
+#line 225 "dlang.lex"
 {printf("["); return 450;}
 	YY_BREAK
 case 167:
 YY_RULE_SETUP
-#line 227 "dlang.lex"
+#line 226 "dlang.lex"
 {printf("]"); return 451;}
 	YY_BREAK
 case 168:
 YY_RULE_SETUP
-#line 228 "dlang.lex"
+#line 227 "dlang.lex"
 {printf("{"); return 452;}
 	YY_BREAK
 case 169:
 YY_RULE_SETUP
-#line 229 "dlang.lex"
+#line 228 "dlang.lex"
 {printf("}"); return 453;}
 	YY_BREAK
 case 170:
 YY_RULE_SETUP
-#line 230 "dlang.lex"
+#line 229 "dlang.lex"
 {printf("("); return 454;}
 	YY_BREAK
 case 171:
 YY_RULE_SETUP
-#line 231 "dlang.lex"
+#line 230 "dlang.lex"
 {printf(")"); return 455;}
 	YY_BREAK
 case 172:
 YY_RULE_SETUP
-#line 232 "dlang.lex"
+#line 231 "dlang.lex"
 {printf("+"); return 456;}
 	YY_BREAK
 case 173:
 YY_RULE_SETUP
-#line 233 "dlang.lex"
+#line 232 "dlang.lex"
 {printf("-"); return 457;}
 	YY_BREAK
 case 174:
 YY_RULE_SETUP
-#line 234 "dlang.lex"
+#line 233 "dlang.lex"
 {printf("*"); return 458;}
 	YY_BREAK
 case 175:
 YY_RULE_SETUP
-#line 235 "dlang.lex"
+#line 234 "dlang.lex"
 {printf("="); return 459;}
 	YY_BREAK
 case 176:
 YY_RULE_SETUP
-#line 236 "dlang.lex"
+#line 235 "dlang.lex"
 {printf("!"); return 460;}
 	YY_BREAK
 case 177:
 YY_RULE_SETUP
-#line 237 "dlang.lex"
+#line 236 "dlang.lex"
 {printf("~"); return 461;}
 	YY_BREAK
 case 178:
 YY_RULE_SETUP
-#line 238 "dlang.lex"
+#line 237 "dlang.lex"
 {printf("&"); return 462;}
 	YY_BREAK
 case 179:
 YY_RULE_SETUP
-#line 239 "dlang.lex"
+#line 238 "dlang.lex"
 {printf("|"); return 463;}
 	YY_BREAK
 case 180:
 YY_RULE_SETUP
-#line 240 "dlang.lex"
+#line 239 "dlang.lex"
 {printf("<"); return 464;}
 	YY_BREAK
 case 181:
 YY_RULE_SETUP
-#line 241 "dlang.lex"
+#line 240 "dlang.lex"
 {printf(">"); return 465;}
 	YY_BREAK
 case 182:
 YY_RULE_SETUP
-#line 242 "dlang.lex"
+#line 241 "dlang.lex"
 {printf("%"); return 466;}
 	YY_BREAK
 case 183:
 YY_RULE_SETUP
-#line 243 "dlang.lex"
+#line 242 "dlang.lex"
 {printf("^"); return 467;}
 	YY_BREAK
 case 184:
 YY_RULE_SETUP
-#line 244 "dlang.lex"
+#line 243 "dlang.lex"
 {printf(" "); return 468;}
 	YY_BREAK
 case 185:
 YY_RULE_SETUP
-#line 245 "dlang.lex"
+#line 244 "dlang.lex"
 {printf(";"); return 469;}
 	YY_BREAK
 case 186:
 YY_RULE_SETUP
-#line 246 "dlang.lex"
+#line 245 "dlang.lex"
 {printf("\r"); return 470;}
 	YY_BREAK
 case 187:
 YY_RULE_SETUP
-#line 247 "dlang.lex"
+#line 246 "dlang.lex"
 {printf(" "); return 471;}
 	YY_BREAK
 case 188:
 YY_RULE_SETUP
-#line 248 "dlang.lex"
+#line 247 "dlang.lex"
 {printf("\t"); return 472;}
 	YY_BREAK
 case 189:
 YY_RULE_SETUP
-#line 249 "dlang.lex"
+#line 248 "dlang.lex"
 {printf("/"); return 473;}
 	YY_BREAK
 case 190:
 /* rule 190 can match eol */
 YY_RULE_SETUP
-#line 250 "dlang.lex"
+#line 249 "dlang.lex"
 {
                                     printf("STRING_CONSTANT");
                                     int j = 0, i=0;
@@ -2539,7 +2538,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 191:
 YY_RULE_SETUP
-#line 261 "dlang.lex"
+#line 260 "dlang.lex"
 {
                                     struct item *aux = ht_get(hashtable, yytext);
                                     if (aux == NULL) {
@@ -2556,78 +2555,78 @@ YY_RULE_SETUP
 	YY_BREAK
 case 192:
 YY_RULE_SETUP
-#line 274 "dlang.lex"
+#line 273 "dlang.lex"
 {printf("COMMENT"); return 1; }
 	YY_BREAK
 case 193:
 YY_RULE_SETUP
-#line 275 "dlang.lex"
+#line 274 "dlang.lex"
 {printf("HEX_CONSTANT"); return 1; }
 	YY_BREAK
 case 194:
 YY_RULE_SETUP
-#line 276 "dlang.lex"
+#line 275 "dlang.lex"
 {printf("BIN_CONSTANT"); return 1; }
 	YY_BREAK
 case 195:
 YY_RULE_SETUP
-#line 277 "dlang.lex"
+#line 276 "dlang.lex"
 {printf("INT_CONSTANT"); return 1; }
 	YY_BREAK
 case 196:
 YY_RULE_SETUP
-#line 278 "dlang.lex"
+#line 277 "dlang.lex"
 {printf("INT_CONSTANT"); return 1; }
 	YY_BREAK
 case 197:
 YY_RULE_SETUP
-#line 279 "dlang.lex"
+#line 278 "dlang.lex"
 {printf("REAL_CONSTANT"); return 1; }
 	YY_BREAK
 case 198:
 YY_RULE_SETUP
-#line 280 "dlang.lex"
+#line 279 "dlang.lex"
 {printf("REAL_CONSTANT"); return 1; }
 	YY_BREAK
 case 199:
 YY_RULE_SETUP
-#line 281 "dlang.lex"
+#line 280 "dlang.lex"
 {printf("REAL_CONSTANT"); return 1; }
 	YY_BREAK
 case 200:
 /* rule 200 can match eol */
 YY_RULE_SETUP
-#line 282 "dlang.lex"
+#line 281 "dlang.lex"
 {printf("\n"); line++; printf("%3d - ", line); return 499;}
 	YY_BREAK
 case 201:
 YY_RULE_SETUP
-#line 283 "dlang.lex"
+#line 282 "dlang.lex"
 {printf("ERROR_HEXADETIMAL(%s)",yytext); return 999; }
 	YY_BREAK
 case 202:
 YY_RULE_SETUP
-#line 284 "dlang.lex"
+#line 283 "dlang.lex"
 {printf("ERROR_BINARY(%s)",yytext); return 999; }
 	YY_BREAK
 case 203:
 YY_RULE_SETUP
-#line 285 "dlang.lex"
+#line 284 "dlang.lex"
 {printf("ERROR_NUMBER(%s)",yytext); return 999; }
 	YY_BREAK
 case 204:
 /* rule 204 can match eol */
 YY_RULE_SETUP
-#line 286 "dlang.lex"
+#line 285 "dlang.lex"
 {printf("ERROR_UNKNOWN(%s)",yytext); return  999; }
 	YY_BREAK
 
 case 205:
 YY_RULE_SETUP
-#line 288 "dlang.lex"
+#line 287 "dlang.lex"
 ECHO;
 	YY_BREAK
-#line 2631 "lex.yy.c"
+#line 2630 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(MULTILINE_COMMENT):
 case YY_STATE_EOF(DOCUMENTATION_COMMENT):
@@ -3631,7 +3630,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 288 "dlang.lex"
+#line 287 "dlang.lex"
 
 
 int yywrap (void ){
