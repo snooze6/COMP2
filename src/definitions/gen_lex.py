@@ -206,4 +206,4 @@ int main(int argc, char **argv) {
     if platform.system()=='Windows':
         os.system("flex dlang.lex && gcc lex.yy.c ../external/model/hash.c ../external/model/list.c -lfl -o dlangLexer && dlangLexer ../../regression.d")
     else:
-        os.system("flex dlang.lex && gcc lex.yy.c ../external/model/hash.c ../external/model/list.c -lfl -o dlangLexer && .dlangLexer ../../regression.d")
+        os.system("flex dlang.lex && gcc lex.yy.c ../external/model/hash.c ../external/model/list.c -lfl -o dlangLexer && ./dlangLexer ../../regression.d")
